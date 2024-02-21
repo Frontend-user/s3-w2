@@ -7,9 +7,19 @@ import {blogsTestManager} from "../utils/blogsTestManager";
 import {UserCreateType, UserInputModelType} from "../../src/users/types/user-types";
 import {AuthType} from "../../src/auth/auth-types/auth-types";
 import {ObjectId} from "mongodb";
-
+import mongoose from 'mongoose'
 describe('/Users', () => {
+    const mongoURI:string = process.env.MONGO_URL!
 
+    beforeAll(async () => {
+        /* Connecting to the database. */
+        await mongoose.connect(mongoURI)
+    })
+
+    afterAll(async () => {
+        /* Closing database connection after each test. */
+        await mongoose.connection.close()
+    })
     const token = 'Basic YWRtaW46cXdlcnR5'
     const clearUserData = {
         "pagesCount": 0,

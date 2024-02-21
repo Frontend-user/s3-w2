@@ -11,7 +11,6 @@ export const usersService = {
     async createUser(user: UserInputModelType, isReqFromSuperAdmin: boolean): Promise<ObjectId | false> {
         const passwordSalt=  await jwtService.generateSalt(10)
         const passwordHash = await jwtService.generateHash(user.password, passwordSalt)
-
          const  userEmailEntity: UserEmailEntityType  = {
              accountData: {
                  login: user.login,

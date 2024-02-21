@@ -9,7 +9,7 @@ export type UserEmailEntityType = {
     passwordHash: string
     emailConfirmation:{
         confirmationCode: string
-        expirationDate:Date | string
+        expirationDate: string | Date
     }
     isConfirmed: boolean
     isCreatedFromAdmin: boolean

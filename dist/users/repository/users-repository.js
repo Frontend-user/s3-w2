@@ -14,13 +14,15 @@ const db_1 = require("../../db");
 exports.usersRepositories = {
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.usersCollection.insertOne(user);
-            return response ? response.insertedId : false;
+            // const response =  await usersCollection.insertOne(user)
+            const response = new db_1.UserModel(user);
+            yield response.save();
+            return response ? response._id : false;
         });
     },
     deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.usersCollection.deleteOne({ _id: id });
+            const response = yield db_1.UserModel.deleteOne({ _id: id });
             return !!response.deletedCount;
         });
     }

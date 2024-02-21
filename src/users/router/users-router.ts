@@ -18,6 +18,7 @@ import {usersQueryRepository} from "../query-repository/users-query-repository";
 import {authorizationMiddleware} from "../../validation/auth-validation";
 import {blogsRouter} from "../../blogs/router/blogs-router";
 import {getQueryData} from "../../common/custom-methods/query-data";
+import clearAllTimers = jest.clearAllTimers;
 
 export const usersValidators = [
     authorizationMiddleware,
@@ -35,10 +36,10 @@ usersRouter.get('/',
         try {
             let {sortBy, sortDirection, pageNumber, pageSize} = getQueryData(req)
 
-            let searchLoginTerm = req.query.searchLoginTerm ? String(req.query.searchLoginTerm): undefined
-            let searchEmailTerm = req.query.searchEmailTerm ? String(req.query.searchEmailTerm): undefined
+            let searchLoginTerm = req.query.searchLoginTerm ? String(req.query.searchLoginTerm) : undefined
+            let searchEmailTerm = req.query.searchEmailTerm ? String(req.query.searchEmailTerm) : undefined
 
-            const blogs = await usersQueryRepository.getUsers(searchLoginTerm,searchEmailTerm, sortBy, sortDirection, pageNumber,pageSize)
+            const blogs = await usersQueryRepository.getUsers(searchLoginTerm, searchEmailTerm, sortBy, sortDirection, pageNumber, pageSize)
             res.status(HTTP_STATUSES.OK_200).send(blogs)
         } catch (error) {
             console.error('Ошибка при получении данных из коллекции:', error);
@@ -57,12 +58,17 @@ usersRouter.post('/',
                 email: req.body.email,
                 password: req.body.password,
             }
-            const response:  ObjectId | false = await usersService.createUser(user, isReqFromSuperAdmin)
-            if (response) {
-                const createdBlog: UserViewType | false = await usersQueryRepository.getUserById(response)
-                res.status(HTTP_STATUSES.CREATED_201).send(createdBlog)
-                return
+            try {
+                const response: ObjectId | false = await usersService.createUser(user, isReqFromSuperAdmin)
+                if (response) {
+                    const createdBlog: UserViewType | false = await usersQueryRepository.getUserById(response)
+                    res.status(HTTP_STATUSES.CREATED_201).send(createdBlog)
+                    return
+                }
+            } catch (e) {
+                console.log(e, 'EERRRor')
             }
+
 
         } catch (error) {
             res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)

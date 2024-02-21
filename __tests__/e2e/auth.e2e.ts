@@ -1,9 +1,23 @@
+import mongoose from "mongoose";
+
 const request = require('supertest')
 import {app} from "../../src/app";
 import {Routes} from "../../src/common/constants/routes";
 const Cookies = require('js-cookie');
 
 describe('/Users', () => {
+
+    const mongoURI:string = process.env.MONGO_URL!
+
+    beforeAll(async () => {
+        /* Connecting to the database. */
+        await mongoose.connect(mongoURI)
+    })
+
+    afterAll(async () => {
+        /* Closing database connection after each test. */
+        await mongoose.connection.close()
+    })
     const token = 'Basic YWRtaW46cXdlcnR5'
     const clearUserData = {
         "pagesCount": 0,

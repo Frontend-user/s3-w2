@@ -48,11 +48,16 @@ exports.usersRouter.post('/', ...exports.usersValidators, (req, res) => __awaite
             email: req.body.email,
             password: req.body.password,
         };
-        const response = yield users_service_1.usersService.createUser(user, isReqFromSuperAdmin);
-        if (response) {
-            const createdBlog = yield users_query_repository_1.usersQueryRepository.getUserById(response);
-            res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(createdBlog);
-            return;
+        try {
+            const response = yield users_service_1.usersService.createUser(user, isReqFromSuperAdmin);
+            if (response) {
+                const createdBlog = yield users_query_repository_1.usersQueryRepository.getUserById(response);
+                res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(createdBlog);
+                return;
+            }
+        }
+        catch (e) {
+            console.log(e, 'EERRRor');
         }
     }
     catch (error) {

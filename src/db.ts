@@ -26,37 +26,30 @@ export const devicesCollection = client.db('db').collection('devices')
 
 const userSchema = new mongoose.Schema<UserEmailEntityType>({
     accountData:{
-        login: String,
-        email: String,
-        createdAt: String,
+        login: {type: String, required: true},
+        email: {type: String, required: true},
+        createdAt: {type: String, required: true},
     },
-    passwordSalt: String,
-    passwordHash: String,
+    passwordSalt: {type: String, required: true},
+    passwordHash: {type: String, required: true},
     emailConfirmation:{
-        confirmationCode: String,
-        expirationDate: Date || String
+        confirmationCode: {type: String, required: true},
+        expirationDate: {type: String, required: true} || {type: Date, required: true}
     },
-    isConfirmed: Boolean,
-    isCreatedFromAdmin: Boolean
-    // userName: {type: String,, required: true},
-    // bio: String,,
-    // addedAt: Date,
-    // avatars: {type: [{
-    //         src: {type: String,, required: true},
-    //         addedAt: {type: Date, required: true}
-    //     }], required: true}
+    isConfirmed:  {type: Boolean, required: true},
+    isCreatedFromAdmin:  {type: Boolean, required: true}
 });
 
-export const UserModel = mongoose.model('users', userSchema);
+export const UserModel = mongoose.model<UserEmailEntityType>('users', userSchema);
 export const  runDb = async () =>{
     try {
 
-        let dbName = "db";
-        await mongoose.connect(url);
         await client.connect();
         await client.db('blogs').command({ping: 1});
         console.log('Connect successfully to mongo server')
-
+        await mongoose.connect(url)
+            .then(() => console.log("Database connected!"))
+            .catch(err => console.log(err));
 
     }catch(e) {
 

@@ -7,22 +7,24 @@ export const authRepositories = {
 
     async authUser(auth: AuthType): Promise<boolean> {
         // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
-        const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        const response = await UserModel.find({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        // const response = await UserModel.find({}).lean()
+        // console.log(response,'response!')
         return !!response
     },
     async getUserHash(auth: AuthType) {
-        const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
-        // const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
         return response ? response : false
     },
     async getUserIdByAutData(auth: AuthType) {
-        const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
-        // const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
         return response ? response : false
     },
     async getConfirmCode(code: string): Promise<boolean> {
-        const getUser = await usersCollection.findOne({'emailConfirmation.confirmationCode': code})
-        // const getUser = await UserModel.findOne({'emailConfirmation.confirmationCode': code})
+        // const getUser = await usersCollection.findOne({'emailConfirmation.confirmationCode': code})
+        const getUser = await UserModel.findOne({'emailConfirmation.confirmationCode': code})
         if (getUser) {
             const respUpdate = await UserModel.updateOne({_id: getUser._id},
                 {isConfirmed: true}

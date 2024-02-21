@@ -31,34 +31,28 @@ exports.tokensCollection = exports.client.db('db').collection('tokens');
 exports.devicesCollection = exports.client.db('db').collection('devices');
 const userSchema = new mongoose_1.default.Schema({
     accountData: {
-        login: String,
-        email: String,
-        createdAt: String,
+        login: { type: String, required: true },
+        email: { type: String, required: true },
+        createdAt: { type: String, required: true },
     },
-    passwordSalt: String,
-    passwordHash: String,
+    passwordSalt: { type: String, required: true },
+    passwordHash: { type: String, required: true },
     emailConfirmation: {
-        confirmationCode: String,
-        expirationDate: Date || String
+        confirmationCode: { type: String, required: true },
+        expirationDate: { type: String, required: true } || { type: Date, required: true }
     },
-    isConfirmed: Boolean,
-    isCreatedFromAdmin: Boolean
-    // userName: {type: String,, required: true},
-    // bio: String,,
-    // addedAt: Date,
-    // avatars: {type: [{
-    //         src: {type: String,, required: true},
-    //         addedAt: {type: Date, required: true}
-    //     }], required: true}
+    isConfirmed: { type: Boolean, required: true },
+    isCreatedFromAdmin: { type: Boolean, required: true }
 });
 exports.UserModel = mongoose_1.default.model('users', userSchema);
 const runDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let dbName = "db";
-        yield mongoose_1.default.connect(url);
         yield exports.client.connect();
         yield exports.client.db('blogs').command({ ping: 1 });
         console.log('Connect successfully to mongo server');
+        yield mongoose_1.default.connect(url)
+            .then(() => console.log("Database connected!"))
+            .catch(err => console.log(err));
     }
     catch (e) {
         console.log('DONT connect successfully to mongo server');
