@@ -35,7 +35,7 @@ exports.usersQueryRepository = {
     getUserById(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(new mongodb_1.ObjectId(userId), 'userId');
-            const getUser = yield db_1.usersCollection.findOne({ _id: new mongodb_1.ObjectId(userId) });
+            const getUser = yield db_1.usersCollection.findOne({ _id: userId });
             console.log(getUser, 'GETUSER');
             return getUser ? this.__changeUserFormat(getUser) : false;
         });

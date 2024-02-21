@@ -25,7 +25,7 @@ export const usersQueryRepository = {
     },
     async getUserById(userId: ObjectId): Promise<UserViewType | false> {
         console.log(new ObjectId(userId),'userId')
-        const getUser = await usersCollection.findOne({_id: new ObjectId(userId)})
+        const getUser = await usersCollection.findOne({_id: userId})
         console.log(getUser,'GETUSER')
         return getUser ? this.__changeUserFormat(getUser) : false
     },
