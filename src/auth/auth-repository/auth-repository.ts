@@ -6,8 +6,8 @@ import {v4 as uuidv4} from "uuid";
 export const authRepositories = {
 
     async authUser(auth: AuthType): Promise<boolean> {
-        const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
-        // const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
         return !!response
     },
     async getUserHash(auth: AuthType) {

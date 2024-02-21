@@ -62,7 +62,7 @@ exports.authRepositories = {
             // const getUser = await UserModel.findOne({'accountData.email': email})
             if (getUser) {
                 const newCode = (0, uuid_1.v4)();
-                const respUpdate = yield db_1.usersCollection.updateOne({ _id: getUser._id }, { 'emailConfirmation.confirmationCode': newCode });
+                const respUpdate = yield db_1.usersCollection.updateOne({ _id: getUser._id }, { $set: { 'emailConfirmation.confirmationCode': newCode } });
                 if (respUpdate.matchedCount === 1) {
                     yield nodemailer_service_1.nodemailerService.send(newCode, email);
                     return true;
