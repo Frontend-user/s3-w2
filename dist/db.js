@@ -44,6 +44,7 @@ const userSchema = new mongoose_1.default.Schema({
     isConfirmed: { type: Boolean, required: true },
     isCreatedFromAdmin: { type: Boolean, required: true }
 });
+// const response = await UserModel.find({}).lean()
 exports.UserModel = mongoose_1.default.model('users', userSchema);
 const runDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {

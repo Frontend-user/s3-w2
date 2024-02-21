@@ -6,28 +6,22 @@ import {v4 as uuidv4} from "uuid";
 export const authRepositories = {
 
     async authUser(auth: AuthType): Promise<boolean> {
-        // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
         const response = await UserModel.find({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
-        // const response = await UserModel.find({}).lean()
-        // console.log(response,'response!')
         return !!response
     },
     async getUserHash(auth: AuthType) {
-        // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
         const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
         return response ? response : false
     },
     async getUserIdByAutData(auth: AuthType) {
-        // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
         const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
         return response ? response : false
     },
     async getConfirmCode(code: string): Promise<boolean> {
-        // const getUser = await usersCollection.findOne({'emailConfirmation.confirmationCode': code})
         const getUser = await UserModel.findOne({'emailConfirmation.confirmationCode': code})
         if (getUser) {
-            const respUpdate = await usersCollection.updateOne({_id: getUser._id},
-                {$set: {isConfirmed: true}}
+            const respUpdate = await UserModel.updateOne({_id: getUser._id},
+                { isConfirmed: true}
             )
             return respUpdate.modifiedCount === 1
         }
@@ -41,7 +35,6 @@ export const authRepositories = {
         return await tokensCollection.find({}).toArray()
     },
     async registrationEmailResending(email: string) {
-        // const getUser = await usersCollection.findOne({'accountData.email': email})
         const getUser = await UserModel.findOne({'accountData.email': email})
         if (getUser) {
             const newCode = uuidv4()

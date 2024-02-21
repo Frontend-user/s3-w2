@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema<UserEmailEntityType>({
     isConfirmed:  {type: Boolean, required: true},
     isCreatedFromAdmin:  {type: Boolean, required: true}
 });
-
+// const response = await UserModel.find({}).lean()
 export const UserModel = mongoose.model<UserEmailEntityType>('users', userSchema);
 export const  runDb = async () =>{
     try {
