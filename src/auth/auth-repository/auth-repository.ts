@@ -44,7 +44,7 @@ export const authRepositories = {
         if (getUser) {
             const newCode = uuidv4()
             const respUpdate = await usersCollection.updateOne({_id: getUser._id},
-                {'emailConfirmation.confirmationCode': newCode}
+                {$set: {'emailConfirmation.confirmationCode': newCode} }
             )
             if (respUpdate.matchedCount === 1) {
                 await nodemailerService.send(newCode, email)
