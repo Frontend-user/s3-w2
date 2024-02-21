@@ -16,8 +16,8 @@ const uuid_1 = require("uuid");
 exports.authRepositories = {
     authUser(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
-            const response = yield db_1.UserModel.find({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            const response = yield db_1.usersCollection.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            // const response = await UserModel.find({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
             // const response = await UserModel.find({}).lean()
             // console.log(response,'response!')
             return !!response;
@@ -25,24 +25,24 @@ exports.authRepositories = {
     },
     getUserHash(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
-            const response = yield db_1.UserModel.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            const response = yield db_1.usersCollection.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            // const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
             return response ? response : false;
         });
     },
     getUserIdByAutData(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
-            const response = yield db_1.UserModel.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            const response = yield db_1.usersCollection.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            // const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
             return response ? response : false;
         });
     },
     getConfirmCode(code) {
         return __awaiter(this, void 0, void 0, function* () {
-            // const getUser = await usersCollection.findOne({'emailConfirmation.confirmationCode': code})
-            const getUser = yield db_1.UserModel.findOne({ 'emailConfirmation.confirmationCode': code });
+            const getUser = yield db_1.usersCollection.findOne({ 'emailConfirmation.confirmationCode': code });
+            // const getUser = await UserModel.findOne({'emailConfirmation.confirmationCode': code})
             if (getUser) {
-                const respUpdate = yield db_1.UserModel.updateOne({ _id: getUser._id }, { isConfirmed: true });
+                const respUpdate = yield db_1.usersCollection.updateOne({ _id: getUser._id }, { $set: { isConfirmed: true } });
                 return respUpdate.modifiedCount === 1;
             }
             return false;

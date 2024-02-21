@@ -10,10 +10,10 @@ export const usersRepositories = {
         // const response = new UserModel(user)
         // await response.save()
         // return response ? response._id : false
-        return response.insertedId
+        return response ? response.insertedId : false
     },
     async deleteUser(id: ObjectId) {
-        const response = await UserModel.deleteOne({_id: id})
+        const response = await usersCollection.deleteOne({_id: id})
         return !!response.deletedCount
     }
 }

@@ -26,8 +26,8 @@ export const authRepositories = {
         const getUser = await usersCollection.findOne({'emailConfirmation.confirmationCode': code})
         // const getUser = await UserModel.findOne({'emailConfirmation.confirmationCode': code})
         if (getUser) {
-            const respUpdate = await UserModel.updateOne({_id: getUser._id},
-                {isConfirmed: true}
+            const respUpdate = await usersCollection.updateOne({_id: getUser._id},
+                {$set: {isConfirmed: true}}
             )
             return respUpdate.modifiedCount === 1
         }
@@ -46,7 +46,7 @@ export const authRepositories = {
         if (getUser) {
             const newCode = uuidv4()
             const respUpdate = await usersCollection.updateOne({_id: getUser._id},
-                {$set: {'emailConfirmation.confirmationCode': newCode} }
+                {$set: {'emailConfirmation.confirmationCode': newCode}}
             )
             if (respUpdate.matchedCount === 1) {
                 await nodemailerService.send(newCode, email)
