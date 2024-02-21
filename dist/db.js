@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runDb = exports.devicesCollection = exports.tokensCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
+exports.runDb = exports.UserModel = exports.devicesCollection = exports.tokensCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv_1 = __importDefault(require("dotenv"));
+const mongoose_1 = __importDefault(require("mongoose"));
 dotenv_1.default.config();
 const url = process.env.MONGO_URL;
 if (!url) {
@@ -28,14 +29,40 @@ exports.usersCollection = exports.client.db('db').collection('users');
 exports.commentsCollection = exports.client.db('db').collection('comments');
 exports.tokensCollection = exports.client.db('db').collection('tokens');
 exports.devicesCollection = exports.client.db('db').collection('devices');
+const userSchema = new mongoose_1.default.Schema({
+    accountData: {
+        login: String,
+        email: String,
+        createdAt: String,
+    },
+    passwordSalt: String,
+    passwordHash: String,
+    emailConfirmation: {
+        confirmationCode: String,
+        expirationDate: Date || String
+    },
+    isConfirmed: Boolean,
+    isCreatedFromAdmin: Boolean
+    // userName: {type: String,, required: true},
+    // bio: String,,
+    // addedAt: Date,
+    // avatars: {type: [{
+    //         src: {type: String,, required: true},
+    //         addedAt: {type: Date, required: true}
+    //     }], required: true}
+});
+exports.UserModel = mongoose_1.default.model('users', userSchema);
 const runDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        let dbName = "db";
+        yield mongoose_1.default.connect(url + "/" + dbName);
         yield exports.client.connect();
         yield exports.client.db('blogs').command({ ping: 1 });
         console.log('Connect successfully to mongo server');
     }
     catch (e) {
         console.log('DONT connect successfully to mongo server');
+        yield mongoose_1.default.disconnect();
         yield exports.client.close();
     }
 });

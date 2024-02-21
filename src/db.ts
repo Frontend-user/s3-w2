@@ -4,9 +4,9 @@ import {BlogCreateType, BlogEntityType} from "./common/types/blog-type";
 import dotenv from 'dotenv'
 import {PostCreateType, PostEntityType} from "./common/types/post-type";
 import {UserCreateType, UserEmailEntityType, UserHashType} from "./users/types/user-types";
-import {CommentCreateType, CommentEntity} from "./comments/types/comment-type";
-dotenv.config()
+import mongoose from "mongoose";
 
+dotenv.config()
 const url = process.env.MONGO_URL
 
 if(!url){
@@ -24,9 +24,35 @@ export const commentsCollection = client.db('db').collection('comments')
 export const tokensCollection = client.db('db').collection('tokens')
 export const devicesCollection = client.db('db').collection('devices')
 
+const userSchema = new mongoose.Schema<UserEmailEntityType>({
+    accountData:{
+        login: String,
+        email: String,
+        createdAt: String,
+    },
+    passwordSalt: String,
+    passwordHash: String,
+    emailConfirmation:{
+        confirmationCode: String,
+        expirationDate: Date || String
+    },
+    isConfirmed: Boolean,
+    isCreatedFromAdmin: Boolean
+    // userName: {type: String,, required: true},
+    // bio: String,,
+    // addedAt: Date,
+    // avatars: {type: [{
+    //         src: {type: String,, required: true},
+    //         addedAt: {type: Date, required: true}
+    //     }], required: true}
+});
+
+export const UserModel = mongoose.model('users', userSchema);
 export const  runDb = async () =>{
     try {
 
+        let dbName = "db";
+        await mongoose.connect(url + "/" + dbName);
         await client.connect();
         await client.db('blogs').command({ping: 1});
         console.log('Connect successfully to mongo server')
@@ -35,6 +61,7 @@ export const  runDb = async () =>{
     }catch(e) {
 
         console.log('DONT connect successfully to mongo server')
+        await mongoose.disconnect()
         await client.close()
     }
 }
