@@ -61,6 +61,15 @@ describe('/Users', () => {
             "email": "emailemail@mail.ru",
             "createdAt": expect.any(String),
         })
+        const responseAll = await request(app)
+            .get(Routes.users)
+            .set('Authorization', `${token}`)
+        expect(responseAll.body.items).toEqual([{
+            "id": expect.any(String),
+            "login": "string",
+            "email": "emailemail@mail.ru",
+            "createdAt": expect.any(String),
+        }])
 
     })
 
@@ -68,9 +77,11 @@ describe('/Users', () => {
         const user: UserInputModelType = inCorrectUserData
         let createUserResponse:any = await blogsTestManager.createBlog(Routes.users, token, user)
         createUserResponse = createUserResponse.body
+
         expect(Array.isArray(createUserResponse.errorsMessages)).toBe(true);
         expect(createUserResponse.errorsMessages.length).toBe(3);
         expect(createUserResponse.errorsMessages[2].field).toBe('email');
+
     })
 
     it('[USERS] [QUERY]', async () => {
@@ -89,7 +100,7 @@ describe('/Users', () => {
         const responseAll = await request(app)
             .get(Routes.users)
             .set('Authorization', `${token}`)
-        expect(responseAll.body.items).toEqual(10)
+        expect(responseAll.body.items.length).toEqual(10)
 
     })
 
