@@ -24,6 +24,10 @@ export const commentsCollection = client.db('db').collection('comments')
 export const tokensCollection = client.db('db').collection('tokens')
 export const devicesCollection = client.db('db').collection('devices')
 
+const tokensSchema = new mongoose.Schema({
+    refreshToken: {type:String, required: true}
+})
+
 const userSchema = new mongoose.Schema<UserEmailEntityType>({
     accountData:{
         login: {type: String, required: true},
@@ -41,6 +45,7 @@ const userSchema = new mongoose.Schema<UserEmailEntityType>({
 });
 // const response = await UserModel.find({}).lean()
 export const UserModel = mongoose.model<UserEmailEntityType>('users', userSchema);
+export const TokensModel = mongoose.model('tokens',tokensSchema);
 export const  runDb = async () =>{
     try {
 

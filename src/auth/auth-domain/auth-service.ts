@@ -5,7 +5,6 @@ import {jwtService} from "../../application/jwt-service";
 import {v4 as uuidv4} from 'uuid'
 import {nodemailerService} from "../../application/nodemailer-service";
 import {add} from 'date-fns/add';
-import {usersCollection} from "../../db";
 import {usersRepositories} from "../../users/repository/users-repository";
 
 const bcrypt = require('bcrypt');

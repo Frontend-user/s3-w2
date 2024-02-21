@@ -1,4 +1,4 @@
-import {tokensCollection, UserModel, usersCollection} from "../../db";
+import {tokensCollection, TokensModel, UserModel, usersCollection} from "../../db";
 import {AuthType} from "../auth-types/auth-types";
 import {nodemailerService} from "../../application/nodemailer-service";
 import {v4 as uuidv4} from "uuid";
@@ -21,25 +21,26 @@ export const authRepositories = {
         const getUser = await UserModel.findOne({'emailConfirmation.confirmationCode': code})
         if (getUser) {
             const respUpdate = await UserModel.updateOne({_id: getUser._id},
-                { isConfirmed: true}
+                {isConfirmed: true}
             )
             return respUpdate.modifiedCount === 1
         }
         return false
     },
     async addUnValidRefreshToken(refreshToken: string) {
-        return await tokensCollection.insertOne({refreshToken: refreshToken})
+        return await TokensModel.create({refreshToken: refreshToken})
     },
 
     async getUnValidRefreshTokens() {
-        return await tokensCollection.find({}).toArray()
+        const tokens = await TokensModel.find({}).lean()
+        return tokens
     },
     async registrationEmailResending(email: string) {
         const getUser = await UserModel.findOne({'accountData.email': email})
         if (getUser) {
             const newCode = uuidv4()
-            const respUpdate = await usersCollection.updateOne({_id: getUser._id},
-                {$set: {'emailConfirmation.confirmationCode': newCode}}
+            const respUpdate = await UserModel.updateOne({_id: getUser._id},
+                {'emailConfirmation.confirmationCode': newCode}
             )
             if (respUpdate.matchedCount === 1) {
                 await nodemailerService.send(newCode, email)

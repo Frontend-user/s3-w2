@@ -44,12 +44,12 @@ exports.authRepositories = {
     },
     addUnValidRefreshToken(refreshToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield db_1.tokensCollection.insertOne({ refreshToken: refreshToken });
+            return yield db_1.TokensModel.create({ refreshToken: refreshToken });
         });
     },
     getUnValidRefreshTokens() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield db_1.tokensCollection.find({}).toArray();
+            return yield db_1.TokensModel.find({}).lean();
         });
     },
     registrationEmailResending(email) {

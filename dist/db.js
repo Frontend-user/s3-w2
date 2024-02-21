@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runDb = exports.UserModel = exports.devicesCollection = exports.tokensCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
+exports.runDb = exports.TokensModel = exports.UserModel = exports.devicesCollection = exports.tokensCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -29,6 +29,9 @@ exports.usersCollection = exports.client.db('db').collection('users');
 exports.commentsCollection = exports.client.db('db').collection('comments');
 exports.tokensCollection = exports.client.db('db').collection('tokens');
 exports.devicesCollection = exports.client.db('db').collection('devices');
+const tokensSchema = new mongoose_1.default.Schema({
+    refreshToken: { type: String, required: true }
+});
 const userSchema = new mongoose_1.default.Schema({
     accountData: {
         login: { type: String, required: true },
@@ -46,6 +49,7 @@ const userSchema = new mongoose_1.default.Schema({
 });
 // const response = await UserModel.find({}).lean()
 exports.UserModel = mongoose_1.default.model('users', userSchema);
+exports.TokensModel = mongoose_1.default.model('tokens', tokensSchema);
 const runDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield exports.client.connect();
