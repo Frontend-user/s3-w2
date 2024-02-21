@@ -55,7 +55,7 @@ exports.UserModel = mongoose_1.default.model('users', userSchema);
 const runDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let dbName = "db";
-        yield mongoose_1.default.connect(url + "/" + dbName);
+        yield mongoose_1.default.connect(url);
         yield exports.client.connect();
         yield exports.client.db('blogs').command({ ping: 1 });
         console.log('Connect successfully to mongo server');

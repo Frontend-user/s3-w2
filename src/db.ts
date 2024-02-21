@@ -52,7 +52,7 @@ export const  runDb = async () =>{
     try {
 
         let dbName = "db";
-        await mongoose.connect(url + "/" + dbName);
+        await mongoose.connect(url);
         await client.connect();
         await client.db('blogs').command({ping: 1});
         console.log('Connect successfully to mongo server')
