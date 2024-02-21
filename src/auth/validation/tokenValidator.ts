@@ -115,6 +115,9 @@ export const emailResendingRestrictionValidator = (req: Request, res: Response, 
         res.sendStatus(429)
         return
     } else {
+        if(emailDates.length >= 5){
+            emailDates = []
+        }
         emailDates.push(now)
         next()
     }
