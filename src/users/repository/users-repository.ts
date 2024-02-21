@@ -7,8 +7,8 @@ export const usersRepositories = {
 
     async createUser(user: UserEmailEntityType): Promise<false | ObjectId> {
         // const response =  await usersCollection.insertOne(user)
-        const response = new UserModel(user)
-        await response.save()
+        const response = await UserModel.create(user)
+        // await response.save()//
         return response ? response._id : false
         // return response ? response.insertedId : false
     },
