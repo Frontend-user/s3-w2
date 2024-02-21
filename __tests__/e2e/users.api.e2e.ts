@@ -89,7 +89,7 @@ describe('/Users', () => {
         const responseAll = await request(app)
             .get(Routes.users)
             .set('Authorization', `${token}`)
-        expect(responseAll.body.items.length).toEqual(10)
+        expect(responseAll.body.items).toEqual(10)
 
     })
 
