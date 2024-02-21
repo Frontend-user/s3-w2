@@ -16,8 +16,8 @@ const uuid_1 = require("uuid");
 exports.authRepositories = {
     authUser(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.usersCollection.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
-            // const response = await UserModel.find({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+            // const response = await usersCollection.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+            const response = yield db_1.UserModel.find({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
             // const response = await UserModel.find({}).lean()
             // console.log(response,'response!')
             return !!response;
