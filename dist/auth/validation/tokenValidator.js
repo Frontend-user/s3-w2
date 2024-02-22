@@ -144,7 +144,7 @@ exports.emailConfirmRestrictionValidator = emailConfirmRestrictionValidator;
 let passwordRecoveryDates = [];
 const passwordRecoveryRestrictionValidator = (req, res, next) => {
     let now = Date.now();
-    if (passwordRecoveryDates.length >= 5 && (now - passwordRecoveryDates[0]) < 10000) {
+    if (passwordRecoveryDates.length >= 4 && (now - passwordRecoveryDates[0]) < 10000) {
         passwordRecoveryDates = [];
         res.sendStatus(429);
         return;
