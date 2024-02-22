@@ -32,7 +32,7 @@ exports.blogsRepositories = {
     },
     deleteBlog(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.blogsCollection.deleteOne({ _id: id });
+            const response = yield db_1.BlogModel.deleteOne({ _id: id });
             return !!response.deletedCount;
         });
     },

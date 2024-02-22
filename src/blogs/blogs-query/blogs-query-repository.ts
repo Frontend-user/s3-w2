@@ -1,4 +1,4 @@
-import {blogsCollection} from "../../db";
+import {BlogModel, blogsCollection} from "../../db";
 import {ObjectId, SortDirection} from "mongodb";
 import {BlogEntityType, BlogViewType} from "../../common/types/blog-type";
 import {blogsSorting} from "./utils/blogs-sorting";
@@ -14,8 +14,8 @@ export const blogsQueryRepository = {
         const findQuery = blogsFinding.getFindings(searchNameTerm)
         const sortQuery = blogsSorting.getSorting(sortBy, sortDirection)
         const {skip, limit, newPageNumber, newPageSize} = blogsPaginate.getPagination(pageNumber, pageSize)
-        let blogs: BlogEntityType[] = await blogsCollection.find(findQuery).sort(sortQuery).skip(skip).limit(limit).toArray();
-        const allBlogs = await blogsCollection.find(findQuery).sort(sortQuery).toArray()
+        let blogs: BlogEntityType[] = await BlogModel.find(findQuery).sort(sortQuery).skip(skip).limit(limit).lean();
+        const allBlogs = await BlogModel.find(findQuery).sort(sortQuery).lean()
         let pagesCount = Math.ceil(allBlogs.length / newPageSize)
 
 
@@ -33,7 +33,7 @@ export const blogsQueryRepository = {
 
     async getBlogById(id: string | ObjectId): Promise<BlogViewType | false> {
         if (ObjectId.isValid(id) && typeof id === 'string' || id instanceof ObjectId) {
-            const blog: BlogEntityType | null = await blogsCollection.findOne({_id: new ObjectId(id)})
+            const blog: BlogEntityType | null = await BlogModel.findOne({_id: new ObjectId(id)})
             return blog ?  changeIdFormat(blog) : false
         }
         return false
