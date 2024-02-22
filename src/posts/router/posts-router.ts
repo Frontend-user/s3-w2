@@ -49,7 +49,7 @@ postsRouter.post('/:postId/comments',
             res.sendStatus(404)
         } else {
             const comment = await commentQueryRepository.getCommentById(commentId)
-            delete  comment.postId
+            delete comment.postId
             res.status(201).send(comment)
         }
     })
@@ -122,13 +122,15 @@ postsRouter.post('/',
 
             try {
                 const response = await postsService.createPost(newPost)
-                if (response instanceof ObjectId) {
+                if (response) {
+
                     const createdPost: PostViewType | boolean = await postsQueryRepository.getPostById(response)
                     res.status(HTTP_STATUSES.CREATED_201).send(createdPost)
                     return
+
                 }
                 res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
-
+                return
             } catch (error) {
                 res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
             }

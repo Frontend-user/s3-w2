@@ -96,12 +96,13 @@ exports.postsRouter.post('/', ...exports.postValidators, (req, res) => __awaiter
         };
         try {
             const response = yield posts_service_1.postsService.createPost(newPost);
-            if (response instanceof mongodb_1.ObjectId) {
+            if (response) {
                 const createdPost = yield posts_query_repository_1.postsQueryRepository.getPostById(response);
                 res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(createdPost);
                 return;
             }
             res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
+            return;
         }
         catch (error) {
             res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
