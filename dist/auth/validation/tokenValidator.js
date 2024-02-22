@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recoveryValidationMiddleware = exports.newPasswordRecoveryRestrictionValidator = exports.passwordRecoveryRestrictionValidator = exports.emailConfirmRestrictionValidator = exports.emailResendingRestrictionValidator = exports.loginRestrictionValidator = exports.authRestrictionValidator = exports.tokenValidationMiddleware = exports.refreshTokenValidator = exports.isUnValidTokenMiddleware = exports.authorizationTokenMiddleware = void 0;
+exports.newPasswordValidation = exports.recoveryValidationMiddleware = exports.newPasswordRecoveryRestrictionValidator = exports.passwordRecoveryRestrictionValidator = exports.emailConfirmRestrictionValidator = exports.emailResendingRestrictionValidator = exports.loginRestrictionValidator = exports.authRestrictionValidator = exports.tokenValidationMiddleware = exports.refreshTokenValidator = exports.isUnValidTokenMiddleware = exports.authorizationTokenMiddleware = void 0;
 const express_validator_1 = require("express-validator");
 const jwt_service_1 = require("../../application/jwt-service");
 const auth_repository_1 = require("../auth-repository/auth-repository");
@@ -189,4 +189,8 @@ const recoveryValidationMiddleware = (req, res, next) => {
     }
 };
 exports.recoveryValidationMiddleware = recoveryValidationMiddleware;
+exports.newPasswordValidation = (0, express_validator_1.body)('newPassword').trim().isString().isLength({ min: 6, max: 20 }).withMessage({
+    message: 'newPassword is unvalid',
+    field: 'newPassword'
+});
 //# sourceMappingURL=tokenValidator.js.map

@@ -191,7 +191,7 @@ exports.authRouter.post('/password-recovery', tokenValidator_1.passwordRecoveryR
         res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
     }
 }));
-exports.authRouter.post('/new-password', tokenValidator_1.newPasswordRecoveryRestrictionValidator, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter.post('/new-password', tokenValidator_1.newPasswordRecoveryRestrictionValidator, tokenValidator_1.newPasswordValidation, tokenValidator_1.recoveryValidationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let newPassword = {
             newPassword: req.body.newPassword,

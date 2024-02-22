@@ -38,7 +38,7 @@ import {
     emailResendingRestrictionValidator,
     isUnValidTokenMiddleware,
     loginRestrictionValidator,
-    newPasswordRecoveryRestrictionValidator,
+    newPasswordRecoveryRestrictionValidator, newPasswordValidation,
     passwordRecoveryRestrictionValidator,
     recoveryValidationMiddleware,
     refreshTokenValidator,
@@ -48,6 +48,7 @@ import {securityService} from "../../security/domain/security-service";
 import {v4 as uuidv4} from "uuid";
 import {querySecurityRepositories} from "../../security/query-repository/query-security-repository";
 import {securityRepositories} from "../../security/repositories/security-repository";
+import {body} from "express-validator";
 
 export const authRouter = Router({})
 
@@ -263,6 +264,8 @@ authRouter.post('/password-recovery',
 
 authRouter.post('/new-password',
     newPasswordRecoveryRestrictionValidator,
+    newPasswordValidation,
+    recoveryValidationMiddleware,
     async (req: Request, res: Response) => {
         try {
             let newPassword = {
@@ -278,3 +281,4 @@ authRouter.post('/new-password',
             res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
         }
     })
+

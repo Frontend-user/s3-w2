@@ -1,4 +1,4 @@
-import {cookie, header, validationResult} from "express-validator";
+import {body, cookie, header, validationResult} from "express-validator";
 import {NextFunction, Request, Response} from "express";
 import {ErrorType} from "../../common/types/error-type";
 import {jwtService} from "../../application/jwt-service";
@@ -187,3 +187,7 @@ export const recoveryValidationMiddleware = (req: Request, res: Response, next: 
         next()
     }
 }
+export const newPasswordValidation = body('newPassword').trim().isString().isLength({min:6, max:20}).withMessage({
+    message: 'newPassword is unvalid',
+    field: 'newPassword'
+})
