@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runDb = exports.RecoveryCodeModel = exports.BlogModel = exports.TokenModel = exports.UserModel = exports.devicesCollection = exports.tokensCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
+exports.runDb = exports.RecoveryCodeModel = exports.PostModel = exports.BlogModel = exports.TokenModel = exports.UserModel = exports.devicesCollection = exports.tokensCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -32,6 +32,14 @@ exports.devicesCollection = exports.client.db('db').collection('devices');
 const tokenSchema = new mongoose_1.default.Schema({
     refreshToken: { type: String, required: true }
 });
+const postSchema = new mongoose_1.default.Schema({
+    title: { type: String, required: true },
+    shortDescription: { type: String, required: true },
+    content: { type: String, required: true },
+    blogName: { type: String, required: true },
+    createdAt: { type: String, required: true },
+    blogId: { type: String || mongodb_1.ObjectId, required: true }
+});
 const blogSchema = new mongoose_1.default.Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
@@ -40,9 +48,9 @@ const blogSchema = new mongoose_1.default.Schema({
     isMembership: { type: Boolean, required: true },
 });
 const recoveryCodeSchema = new mongoose_1.default.Schema({
+    userId: { type: mongodb_1.ObjectId, required: true },
     recoveryCode: { type: String, required: true },
     email: { type: String, required: true },
-    userId: { type: mongodb_1.ObjectId, required: true }
 });
 const userSchema = new mongoose_1.default.Schema({
     accountData: {
@@ -62,6 +70,7 @@ const userSchema = new mongoose_1.default.Schema({
 exports.UserModel = mongoose_1.default.model('users', userSchema);
 exports.TokenModel = mongoose_1.default.model('tokens', tokenSchema);
 exports.BlogModel = mongoose_1.default.model('blogs', blogSchema);
+exports.PostModel = mongoose_1.default.model('posts', postSchema);
 exports.RecoveryCodeModel = mongoose_1.default.model('recovery-code', recoveryCodeSchema);
 const runDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {

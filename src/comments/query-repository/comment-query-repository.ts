@@ -1,4 +1,4 @@
-import {commentsCollection, postsCollection} from "../../db";
+import {commentsCollection} from "../../db";
 import {ObjectId} from "mongodb";
 import {blogsSorting} from "../../blogs/blogs-query/utils/blogs-sorting";
 import {blogsPaginate} from "../../blogs/blogs-query/utils/blogs-paginate";

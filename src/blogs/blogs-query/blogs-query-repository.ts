@@ -1,4 +1,4 @@
-import {BlogModel, blogsCollection} from "../../db";
+import {BlogModel} from "../../db";
 import {ObjectId, SortDirection} from "mongodb";
 import {BlogEntityType, BlogViewType} from "../../common/types/blog-type";
 import {blogsSorting} from "./utils/blogs-sorting";

@@ -14,19 +14,19 @@ const db_1 = require("../../db");
 exports.postsRepositories = {
     createPost(post) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.postsCollection.insertOne(post);
-            return response.insertedId ? response.insertedId : false;
+            const response = yield db_1.PostModel.create(post);
+            return response._id ? response._id : false;
         });
     },
     updatePost(id, updatePost) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.postsCollection.updateOne({ _id: id }, { $set: updatePost });
+            const response = yield db_1.PostModel.updateOne({ _id: id }, updatePost);
             return response.matchedCount === 1;
         });
     },
     deletePost(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.postsCollection.deleteOne({ _id: id });
+            const response = yield db_1.PostModel.deleteOne({ _id: id });
             return !!response.deletedCount;
         });
     },

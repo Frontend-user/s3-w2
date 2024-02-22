@@ -9,11 +9,11 @@ import mongoose from "mongoose";
 dotenv.config()
 const url = process.env.MONGO_URL
 
-if(!url){
+if (!url) {
     throw new Error('! Url doesn\'t found')
 }
 
-console.log('url',url)
+console.log('url', url)
 
 
 export const client = new MongoClient(url)
@@ -25,45 +25,55 @@ export const tokensCollection = client.db('db').collection('tokens')
 export const devicesCollection = client.db('db').collection('devices')
 
 const tokenSchema = new mongoose.Schema({
-    refreshToken: {type:String, required: true}
+    refreshToken: {type: String, required: true}
 })
-const blogSchema = new mongoose.Schema({
-    name:  {type: String, required: true},
-    description:  {type: String, required: true},
-    websiteUrl:  {type: String, required: true},
-    createdAt:  {type: String, required: true},
-    isMembership:  {type: Boolean, required: true},
+
+const postSchema = new mongoose.Schema<PostEntityType>({
+    title: {type: String, required: true},
+    shortDescription: {type: String, required: true},
+    content: {type: String, required: true},
+    blogName: {type: String, required: true},
+    createdAt: {type: String, required: true},
+    blogId: {type: String || ObjectId, required: true}
+})
+const blogSchema = new mongoose.Schema<BlogEntityType>({
+    name: {type: String, required: true},
+    description: {type: String, required: true},
+    websiteUrl: {type: String, required: true},
+    createdAt: {type: String, required: true},
+    isMembership: {type: Boolean, required: true},
 })
 const recoveryCodeSchema = new mongoose.Schema<RecoveryCodeType>({
-    recoveryCode:{type: String, required: true},
-    email:{type: String, required: true},
-    userId:{type: ObjectId, required: true}
+    userId: {type: ObjectId, required: true},
+    recoveryCode: {type: String, required: true},
+    email: {type: String, required: true},
 })
 const userSchema = new mongoose.Schema<UserEmailEntityType>({
-    accountData:{
+    accountData: {
         login: {type: String, required: true},
         email: {type: String, required: true},
         createdAt: {type: String, required: true},
     },
     passwordSalt: {type: String, required: true},
     passwordHash: {type: String, required: true},
-    emailConfirmation:{
+    emailConfirmation: {
         confirmationCode: {type: String, required: true},
         expirationDate: {type: String, required: true} || {type: Date, required: true}
     },
-    isConfirmed:  {type: Boolean, required: true},
-    isCreatedFromAdmin:  {type: Boolean, required: true}
+    isConfirmed: {type: Boolean, required: true},
+    isCreatedFromAdmin: {type: Boolean, required: true}
 });
 export const UserModel = mongoose.model<UserEmailEntityType>('users', userSchema);
-export const TokenModel = mongoose.model('tokens',tokenSchema);
-export const BlogModel = mongoose.model('blogs',blogSchema);
+export const TokenModel = mongoose.model('tokens', tokenSchema);
+export const BlogModel = mongoose.model<BlogEntityType>('blogs', blogSchema);
+export const PostModel = mongoose.model<PostEntityType>('posts', postSchema);
 type RecoveryCodeType = {
     email: string
     recoveryCode: string
-    userId: ObjectId
+    userId:  {type: ObjectId, required: true}
 }
-export const RecoveryCodeModel = mongoose.model<RecoveryCodeType>('recovery-code',recoveryCodeSchema);
-export const  runDb = async () =>{
+export const RecoveryCodeModel = mongoose.model<RecoveryCodeType>('recovery-code', recoveryCodeSchema);
+export const runDb = async () => {
     try {
 
         await client.connect();
@@ -73,7 +83,7 @@ export const  runDb = async () =>{
             .then(() => console.log("Database connected!"))
             .catch(err => console.log(err));
 
-    }catch(e) {
+    } catch (e) {
 
         console.log('DONT connect successfully to mongo server')
         await mongoose.disconnect()

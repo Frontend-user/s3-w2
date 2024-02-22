@@ -1,6 +1,5 @@
-import {CommentCreateType, CommentEntity} from "../types/comment-type";
-import {commentsCollection, postsCollection} from "../../db";
-import {PostCreateType, PostUpdateType} from "../../common/types/post-type";
+import {CommentCreateType} from "../types/comment-type";
+import {commentsCollection} from "../../db";
 import {ObjectId} from "mongodb";
 
 export const commentsRepository = {

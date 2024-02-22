@@ -20,8 +20,8 @@ exports.postsQueryRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             const sortQuery = blogs_sorting_1.blogsSorting.getSorting(sortBy, sortDirection);
             const { skip, limit, newPageNumber, newPageSize } = blogs_paginate_1.blogsPaginate.getPagination(pageNumber, pageSize);
-            let posts = yield db_1.postsCollection.find({}).sort(sortQuery).skip(skip).limit(limit).toArray();
-            const allPosts = yield db_1.postsCollection.find({}).sort(sortQuery).toArray();
+            let posts = yield db_1.PostModel.find({}).sort(sortQuery).skip(skip).limit(limit).lean();
+            const allPosts = yield db_1.PostModel.find({}).sort(sortQuery).lean();
             let pagesCount = Math.ceil(allPosts.length / newPageSize);
             const fixArrayIds = posts.map((item => (0, change_id_format_1.changeIdFormat)(item)));
             return {
@@ -37,8 +37,8 @@ exports.postsQueryRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             const sortQuery = blogs_sorting_1.blogsSorting.getSorting(sortBy, sortDirection);
             const { skip, limit, newPageNumber, newPageSize } = blogs_paginate_1.blogsPaginate.getPagination(pageNumber, pageSize);
-            let posts = yield db_1.postsCollection.find({ "blogId": blogId }).sort(sortQuery).skip(skip).limit(limit).toArray();
-            const allPosts = yield db_1.postsCollection.find({ "blogId": blogId }).toArray();
+            let posts = yield db_1.PostModel.find({ "blogId": blogId }).sort(sortQuery).skip(skip).limit(limit).lean();
+            const allPosts = yield db_1.PostModel.find({ "blogId": blogId }).lean();
             let pagesCount = Math.ceil(allPosts.length / newPageSize);
             const fixArrayIds = posts.map((item => (0, change_id_format_1.changeIdFormat)(item)));
             return {
@@ -52,7 +52,7 @@ exports.postsQueryRepository = {
     },
     getPostById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const post = yield db_1.postsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            const post = yield db_1.PostModel.findOne({ _id: new mongodb_1.ObjectId(id) });
             return post ? (0, change_id_format_1.changeIdFormat)(post) : false;
         });
     },
