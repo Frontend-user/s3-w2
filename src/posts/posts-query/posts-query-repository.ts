@@ -45,8 +45,8 @@ export const postsQueryRepository = {
     },
 
     async getPostById(id: string | ObjectId): Promise<PostViewType | boolean> {
-        const post: PostEntityType | null = await PostModel.findOne({_id: new ObjectId(id)})
-        return post ? await changeIdFormat(post) : false
+        const post: PostEntityType | null = await PostModel.findOne({_id: new ObjectId(id)}).lean()
+        return post ?  changeIdFormat(post) : false
     },
 
 

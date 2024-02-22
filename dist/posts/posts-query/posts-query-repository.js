@@ -52,8 +52,8 @@ exports.postsQueryRepository = {
     },
     getPostById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const post = yield db_1.PostModel.findOne({ _id: new mongodb_1.ObjectId(id) });
-            return post ? yield (0, change_id_format_1.changeIdFormat)(post) : false;
+            const post = yield db_1.PostModel.findOne({ _id: new mongodb_1.ObjectId(id) }).lean();
+            return post ? (0, change_id_format_1.changeIdFormat)(post) : false;
         });
     },
 };

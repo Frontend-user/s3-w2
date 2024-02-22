@@ -2,7 +2,6 @@ import {commentsCollection} from "../../db";
 import {ObjectId} from "mongodb";
 import {blogsSorting} from "../../blogs/blogs-query/utils/blogs-sorting";
 import {blogsPaginate} from "../../blogs/blogs-query/utils/blogs-paginate";
-import {changeIdFormat} from "../../common/custom-methods/change-id-format";
 
 export const commentQueryRepository = {
     async getCommentByCommentId() {
