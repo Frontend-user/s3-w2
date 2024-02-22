@@ -182,4 +182,13 @@ exports.authRouter.post('/registration-email-resending', tokenValidator_1.emailR
         res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
     }
 }));
+exports.authRouter.post('/password-recovery', tokenValidator_1.passwordRecoveryRestrictionValidator, users_validation_1.usersEmailValidation, users_validation_1.userEmailExistValidation, tokenValidator_1.recoveryValidationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield auth_service_1.authService.recoveryCodeEmailSend(req.body.email);
+        res.send(204);
+    }
+    catch (error) {
+        res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
+    }
+}));
 //# sourceMappingURL=auth-router.js.map

@@ -69,6 +69,11 @@ exports.authService = {
         return __awaiter(this, void 0, void 0, function* () {
             return yield auth_repository_1.authRepositories.registrationEmailResending(email);
         });
+    },
+    recoveryCodeEmailSend(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield auth_repository_1.authRepositories.recoveryCodeEmailSend(email);
+        });
     }
 };
 //# sourceMappingURL=auth-service.js.map

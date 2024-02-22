@@ -28,13 +28,13 @@ export const usersEmailValidation = body('email').trim().isString().withMessage(
 })
 export const userEmailExistValidation = body('email').custom(async (value, {req}) => {
     const isExistEmail = await usersQueryRepository.getUserByCustomField('accountData.email',value)
-    if (!isExistEmail) {
+    if (isExistEmail) {
         return true
     } else {
         throw new Error('email exist');
     }
 }).withMessage({
-    message: 'email exist',
+    message: 'email not exist',
     field: 'email'
 })
 export const userLoginExistValidation = body('login').custom(async (value, {req}) => {

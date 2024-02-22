@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.emailConfirmRestrictionValidator = exports.emailResendingRestrictionValidator = exports.loginRestrictionValidator = exports.authRestrictionValidator = exports.tokenValidationMiddleware = exports.refreshTokenValidator = exports.isUnValidTokenMiddleware = exports.authorizationTokenMiddleware = void 0;
+exports.recoveryValidationMiddleware = exports.passwordRecoveryRestrictionValidator = exports.emailConfirmRestrictionValidator = exports.emailResendingRestrictionValidator = exports.loginRestrictionValidator = exports.authRestrictionValidator = exports.tokenValidationMiddleware = exports.refreshTokenValidator = exports.isUnValidTokenMiddleware = exports.authorizationTokenMiddleware = void 0;
 const express_validator_1 = require("express-validator");
 const jwt_service_1 = require("../../application/jwt-service");
 const auth_repository_1 = require("../auth-repository/auth-repository");
@@ -141,4 +141,38 @@ const emailConfirmRestrictionValidator = (req, res, next) => {
     }
 };
 exports.emailConfirmRestrictionValidator = emailConfirmRestrictionValidator;
+let passwordRecoveryDates = [];
+const passwordRecoveryRestrictionValidator = (req, res, next) => {
+    let now = Date.now();
+    if (passwordRecoveryDates.length >= 5 && (now - passwordRecoveryDates[0]) < 10000) {
+        passwordRecoveryDates = [];
+        res.sendStatus(429);
+        return;
+    }
+    else {
+        passwordRecoveryDates.push(now);
+        next();
+    }
+};
+exports.passwordRecoveryRestrictionValidator = passwordRecoveryRestrictionValidator;
+const recoveryValidationMiddleware = (req, res, next) => {
+    const errors = (0, express_validator_1.validationResult)(req).array({ onlyFirstError: true });
+    console.log(errors, 'errros');
+    if (errors.length) {
+        let errorsForClient = [];
+        for (const error of errors) {
+            errorsForClient.push(error.msg);
+            if (error.msg.message === 'email not exist') {
+                res.sendStatus(204);
+                return;
+            }
+        }
+        res.status(400).json({ errorsMessages: errorsForClient });
+        return;
+    }
+    else {
+        next();
+    }
+};
+exports.recoveryValidationMiddleware = recoveryValidationMiddleware;
 //# sourceMappingURL=tokenValidator.js.map

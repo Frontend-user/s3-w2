@@ -136,3 +136,39 @@ export const emailConfirmRestrictionValidator = (req: Request, res: Response, ne
         next()
     }
 }
+
+let passwordRecoveryDates:any = []
+
+export const passwordRecoveryRestrictionValidator = (req: Request, res: Response, next: NextFunction) => {
+    let now = Date.now()
+
+    if (passwordRecoveryDates.length >= 5 && (now - passwordRecoveryDates[0]) < 10000) {
+        passwordRecoveryDates = []
+
+        res.sendStatus(429)
+        return
+    } else {
+        passwordRecoveryDates.push(now)
+        next()
+    }
+}
+
+export const recoveryValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({onlyFirstError:true})
+    console.log(errors,'errros')
+    if (errors.length) {
+        let errorsForClient:ErrorType[] = []
+        for (const error of errors) {
+            errorsForClient.push(error.msg)
+            if(error.msg.message==='email not exist'){
+                res.sendStatus(204)
+                return;
+            }
+        }
+
+        res.status(400).json({ errorsMessages: errorsForClient });
+        return
+    } else {
+        next()
+    }
+}

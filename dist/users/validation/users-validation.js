@@ -34,14 +34,14 @@ exports.usersEmailValidation = (0, express_validator_1.body)('email').trim().isS
 });
 exports.userEmailExistValidation = (0, express_validator_1.body)('email').custom((value, { req }) => __awaiter(void 0, void 0, void 0, function* () {
     const isExistEmail = yield users_query_repository_1.usersQueryRepository.getUserByCustomField('accountData.email', value);
-    if (!isExistEmail) {
+    if (isExistEmail) {
         return true;
     }
     else {
         throw new Error('email exist');
     }
 })).withMessage({
-    message: 'email exist',
+    message: 'email not exist',
     field: 'email'
 });
 exports.userLoginExistValidation = (0, express_validator_1.body)('login').custom((value, { req }) => __awaiter(void 0, void 0, void 0, function* () {

@@ -35,7 +35,7 @@ import {
     authorizationTokenMiddleware,
     authRestrictionValidator, emailConfirmRestrictionValidator, emailResendingRestrictionValidator,
     isUnValidTokenMiddleware,
-    loginRestrictionValidator,
+    loginRestrictionValidator, passwordRecoveryRestrictionValidator, recoveryValidationMiddleware,
     refreshTokenValidator,
     tokenValidationMiddleware,
 } from "../validation/tokenValidator";
@@ -241,3 +241,17 @@ authRouter.post('/registration-email-resending',
         }
     })
 
+authRouter.post('/password-recovery',
+    passwordRecoveryRestrictionValidator,
+    usersEmailValidation,
+    userEmailExistValidation,
+    recoveryValidationMiddleware,
+    async (req: Request, res: Response) => {
+        try {
+         await authService.recoveryCodeEmailSend(req.body.email)
+            res.send(204)
+
+        } catch (error) {
+            res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
+        }
+    })

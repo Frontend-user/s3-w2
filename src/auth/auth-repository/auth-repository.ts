@@ -35,6 +35,15 @@ export const authRepositories = {
         const tokens = await TokenModel.find({}).lean()
         return tokens
     },
+    async recoveryCodeEmailSend(email: string){
+        const getUser = await UserModel.findOne({'accountData.email': email})
+        if (getUser) {
+            const recoveryCode = uuidv4()
+                await nodemailerService.sendRecoveryCode(recoveryCode, email)
+                return true
+        }
+        return false
+    },
     async registrationEmailResending(email: string) {
         const getUser = await UserModel.findOne({'accountData.email': email})
         if (getUser) {

@@ -22,8 +22,8 @@ exports.blogsQueryRepository = {
             const findQuery = blogs_finding_1.blogsFinding.getFindings(searchNameTerm);
             const sortQuery = blogs_sorting_1.blogsSorting.getSorting(sortBy, sortDirection);
             const { skip, limit, newPageNumber, newPageSize } = blogs_paginate_1.blogsPaginate.getPagination(pageNumber, pageSize);
-            let blogs = yield db_1.blogsCollection.find(findQuery).sort(sortQuery).skip(skip).limit(limit).toArray();
-            const allBlogs = yield db_1.blogsCollection.find(findQuery).sort(sortQuery).toArray();
+            let blogs = yield db_1.BlogModel.find(findQuery).sort(sortQuery).skip(skip).limit(limit).lean();
+            const allBlogs = yield db_1.BlogModel.find(findQuery).sort(sortQuery).lean();
             let pagesCount = Math.ceil(allBlogs.length / newPageSize);
             const fixArrayIds = blogs.map((item => (0, change_id_format_1.changeIdFormat)(item)));
             const response = {
@@ -39,7 +39,7 @@ exports.blogsQueryRepository = {
     getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             if (mongodb_1.ObjectId.isValid(id) && typeof id === 'string' || id instanceof mongodb_1.ObjectId) {
-                const blog = yield db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+                const blog = yield db_1.BlogModel.findOne({ _id: new mongodb_1.ObjectId(id) });
                 return blog ? (0, change_id_format_1.changeIdFormat)(blog) : false;
             }
             return false;

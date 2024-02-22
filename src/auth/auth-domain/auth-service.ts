@@ -54,8 +54,9 @@ export const authService = {
         return  await authRepositories.getConfirmCode(code)
     },
     async registrationEmailResending(email:string) {
-
        return  await authRepositories.registrationEmailResending(email)
-
+    },
+    async recoveryCodeEmailSend(email:string) {
+        return  await authRepositories.recoveryCodeEmailSend(email)
     }
 }
