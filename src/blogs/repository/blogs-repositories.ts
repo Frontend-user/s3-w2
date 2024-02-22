@@ -7,8 +7,8 @@ export const blogsRepositories = {
 
     async createBlog(blog: BlogCreateType): Promise<false | ObjectId> {
         try {
-            const response = await BlogModel.create(blog)
-            return response ? response._id : false
+            const response = await blogsCollection.insertOne(blog)
+            return response ? response.insertedId : false
 
         }
     catch (e){
@@ -18,13 +18,13 @@ export const blogsRepositories = {
     },
 
     async updateBlog(id: ObjectId, updateBlog: BlogUpdateType): Promise<boolean> {
-        const response = await BlogModel.updateOne({_id: id}, { updateBlog})
+        const response = await blogsCollection.updateOne({_id: id}, {$set: updateBlog})
         return response.matchedCount === 1;
     },
 
 
     async deleteBlog(id: ObjectId): Promise<boolean> {
-        const response = await BlogModel.deleteOne({_id: id})
+        const response = await blogsCollection.deleteOne({_id: id})
         return !!response.deletedCount;
     },
 
