@@ -150,6 +150,9 @@ const passwordRecoveryRestrictionValidator = (req, res, next) => {
         return;
     }
     else {
+        if (passwordRecoveryDates.length >= 5) {
+            passwordRecoveryDates = [];
+        }
         passwordRecoveryDates.push(now);
         next();
     }
@@ -164,6 +167,9 @@ const newPasswordRecoveryRestrictionValidator = (req, res, next) => {
         return;
     }
     else {
+        if (newPasswordRecoveryDates.length >= 5) {
+            newPasswordRecoveryDates = [];
+        }
         newPasswordRecoveryDates.push(now);
         next();
     }

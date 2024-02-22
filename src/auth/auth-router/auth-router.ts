@@ -254,11 +254,11 @@ authRouter.post('/password-recovery',
     recoveryValidationMiddleware,
     async (req: Request, res: Response) => {
         try {
-            await authService.recoveryCodeEmailSend(req.body.email)
+    let resp =             await authService.recoveryCodeEmailSend(req.body.email)
             res.send(204)
 
         } catch (error) {
-            res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
+            res.sendStatus(HTTP_STATUSES.SOMETHING_WRONG_400)
         }
     })
 
@@ -278,7 +278,7 @@ authRouter.post('/new-password',
             }
             res.sendStatus(204)
         } catch (error) {
-            res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
+            res.sendStatus(HTTP_STATUSES.SOMETHING_WRONG_400)
         }
     })
 

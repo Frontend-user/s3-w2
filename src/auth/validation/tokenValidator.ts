@@ -149,6 +149,9 @@ export const passwordRecoveryRestrictionValidator = (req: Request, res: Response
         res.sendStatus(429)
         return
     } else {
+        if(passwordRecoveryDates.length >= 5){
+            passwordRecoveryDates = []
+        }
         passwordRecoveryDates.push(now)
         next()
     }
@@ -163,6 +166,9 @@ export const newPasswordRecoveryRestrictionValidator = (req: Request, res: Respo
         res.sendStatus(429)
         return
     } else {
+        if(newPasswordRecoveryDates.length >= 5){
+            newPasswordRecoveryDates = []
+        }
         newPasswordRecoveryDates.push(now)
         next()
     }
