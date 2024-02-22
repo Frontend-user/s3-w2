@@ -1,4 +1,4 @@
-import {MongoClient} from 'mongodb'
+import {MongoClient, ObjectId} from 'mongodb'
 import {BlogCreateType, BlogEntityType} from "./common/types/blog-type";
 
 import dotenv from 'dotenv'
@@ -24,8 +24,15 @@ export const commentsCollection = client.db('db').collection('comments')
 export const tokensCollection = client.db('db').collection('tokens')
 export const devicesCollection = client.db('db').collection('devices')
 
-const tokensSchema = new mongoose.Schema({
+const tokenSchema = new mongoose.Schema({
     refreshToken: {type:String, required: true}
+})
+const blogSchema = new mongoose.Schema({
+    name:  {type: String, required: true},
+    description:  {type: String, required: true},
+    websiteUrl:  {type: String, required: true},
+    createdAt:  {type: String, required: true},
+    isMembership:  {type: Boolean, required: true},
 })
 
 const userSchema = new mongoose.Schema<UserEmailEntityType>({
@@ -45,7 +52,8 @@ const userSchema = new mongoose.Schema<UserEmailEntityType>({
 });
 // const response = await UserModel.find({}).lean()
 export const UserModel = mongoose.model<UserEmailEntityType>('users', userSchema);
-export const TokensModel = mongoose.model('tokens',tokensSchema);
+export const TokenModel = mongoose.model('tokens',tokenSchema);
+export const BlogModel = mongoose.model('blogs',blogSchema);
 export const  runDb = async () =>{
     try {
 

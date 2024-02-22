@@ -44,12 +44,13 @@ exports.authRepositories = {
     },
     addUnValidRefreshToken(refreshToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield db_1.TokensModel.create({ refreshToken: refreshToken });
+            return yield db_1.TokenModel.create({ refreshToken: refreshToken });
         });
     },
     getUnValidRefreshTokens() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield db_1.TokensModel.find({}).lean();
+            const tokens = yield db_1.TokenModel.find({}).lean();
+            return tokens;
         });
     },
     registrationEmailResending(email) {
@@ -57,7 +58,7 @@ exports.authRepositories = {
             const getUser = yield db_1.UserModel.findOne({ 'accountData.email': email });
             if (getUser) {
                 const newCode = (0, uuid_1.v4)();
-                const respUpdate = yield db_1.usersCollection.updateOne({ _id: getUser._id }, { $set: { 'emailConfirmation.confirmationCode': newCode } });
+                const respUpdate = yield db_1.UserModel.updateOne({ _id: getUser._id }, { 'emailConfirmation.confirmationCode': newCode });
                 if (respUpdate.matchedCount === 1) {
                     yield nodemailer_service_1.nodemailerService.send(newCode, email);
                     return true;

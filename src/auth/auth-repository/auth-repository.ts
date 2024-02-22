@@ -1,4 +1,4 @@
-import {tokensCollection, TokensModel, UserModel, usersCollection} from "../../db";
+import {tokensCollection, TokenModel, UserModel, usersCollection} from "../../db";
 import {AuthType} from "../auth-types/auth-types";
 import {nodemailerService} from "../../application/nodemailer-service";
 import {v4 as uuidv4} from "uuid";
@@ -28,11 +28,11 @@ export const authRepositories = {
         return false
     },
     async addUnValidRefreshToken(refreshToken: string) {
-        return await TokensModel.create({refreshToken: refreshToken})
+        return await TokenModel.create({refreshToken: refreshToken})
     },
 
     async getUnValidRefreshTokens() {
-        const tokens = await TokensModel.find({}).lean()
+        const tokens = await TokenModel.find({}).lean()
         return tokens
     },
     async registrationEmailResending(email: string) {
