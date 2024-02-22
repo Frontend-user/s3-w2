@@ -35,7 +35,7 @@ exports.usersQueryRepository = {
     getUserById(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(new mongodb_1.ObjectId(userId), 'userId');
-            const getUser = yield db_1.UserModel.findOne({ _id: userId });
+            const getUser = yield db_1.UserModel.findOne({ _id: userId }).lean();
             console.log(getUser, 'GETUSER');
             return getUser ? this.__changeUserFormat(getUser) : false;
         });
@@ -44,7 +44,7 @@ exports.usersQueryRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             let findQuery = {};
             findQuery[`${fieldName}`] = value;
-            const getUser = yield db_1.UserModel.findOne(findQuery);
+            const getUser = yield db_1.UserModel.findOne(findQuery).lean();
             return !!getUser;
         });
     },
@@ -52,7 +52,7 @@ exports.usersQueryRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             let findQuery = {};
             findQuery[`${fieldName}`] = value;
-            const getUser = yield db_1.UserModel.findOne(findQuery);
+            const getUser = yield db_1.UserModel.findOne(findQuery).lean();
             return getUser;
         });
     },

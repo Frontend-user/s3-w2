@@ -9,19 +9,19 @@ import {ObjectId} from "mongodb";
 export const authRepositories = {
 
     async authUser(auth: AuthType): Promise<boolean> {
-        const response = await UserModel.find({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        const response = await UserModel.find({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]}).lean()
         return !!response
     },
     async getUserHash(auth: AuthType) {
-        const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]}).lean()
         return response ? response : false
     },
     async getUserIdByAutData(auth: AuthType) {
-        const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]})
+        const response = await UserModel.findOne({$or: [{'accountData.login': auth.loginOrEmail}, {'accountData.email': auth.loginOrEmail}]}).lean()
         return response ? response : false
     },
     async getConfirmCode(code: string): Promise<boolean> {
-        const getUser = await UserModel.findOne({'emailConfirmation.confirmationCode': code})
+        const getUser = await UserModel.findOne({'emailConfirmation.confirmationCode': code}).lean()
         if (getUser) {
             const respUpdate = await UserModel.updateOne({_id: getUser._id},
                 {isConfirmed: true}
@@ -39,7 +39,7 @@ export const authRepositories = {
         return tokens
     },
     async recoveryCodeEmailSend(email: string) {
-        const getUser = await UserModel.findOne({'accountData.email': email})
+        const getUser = await UserModel.findOne({'accountData.email': email}).lean()
         let id: ObjectId | null = getUser ? getUser._id : null
         if (id) {
             const recoveryCode = uuidv4()
@@ -59,7 +59,7 @@ export const authRepositories = {
 
     },
     async registrationEmailResending(email: string) {
-        const getUser = await UserModel.findOne({'accountData.email': email})
+        const getUser = await UserModel.findOne({'accountData.email': email}).lean()
         if (getUser) {
             const newCode = uuidv4()
             const respUpdate = await UserModel.updateOne({_id: getUser._id},

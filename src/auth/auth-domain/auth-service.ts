@@ -68,7 +68,7 @@ export const authService = {
         const passwordHash = await jwtService.generateHash(newPassword.newPassword, passwordSalt)
         let getUserEmail
         try {
-            getUserEmail = await RecoveryCodeModel.findOne({recoveryCode: newPassword.recoveryCode})
+            getUserEmail = await RecoveryCodeModel.findOne({recoveryCode: newPassword.recoveryCode}).lean()
         } catch (e) {
             return false
         }

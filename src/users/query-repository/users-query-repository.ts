@@ -25,20 +25,20 @@ export const usersQueryRepository = {
     },
     async getUserById(userId: ObjectId): Promise<UserViewType | false> {
         console.log(new ObjectId(userId),'userId')
-        const getUser = await UserModel.findOne({_id: userId})
+        const getUser = await UserModel.findOne({_id: userId}).lean()
         console.log(getUser,'GETUSER')
         return getUser ? this.__changeUserFormat(getUser) : false
     },
     async getUserByCustomField(fieldName: string, value: string): Promise<UserEmailEntityType | boolean> {
         let findQuery: any = {}
         findQuery[`${fieldName}`] = value
-        const getUser = await UserModel.findOne(findQuery)
+        const getUser = await UserModel.findOne(findQuery).lean()
         return !!getUser
     },
     async getUserDataByCustomField(fieldName: string, value: string): Promise<UserEmailEntityType | null> {
         let findQuery: any = {}
         findQuery[`${fieldName}`] = value
-        const getUser = await UserModel.findOne(findQuery)
+        const getUser = await UserModel.findOne(findQuery).lean()
         return getUser
     },
 

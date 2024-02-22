@@ -16,25 +16,25 @@ const uuid_1 = require("uuid");
 exports.authRepositories = {
     authUser(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.UserModel.find({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            const response = yield db_1.UserModel.find({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] }).lean();
             return !!response;
         });
     },
     getUserHash(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.UserModel.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            const response = yield db_1.UserModel.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] }).lean();
             return response ? response : false;
         });
     },
     getUserIdByAutData(auth) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.UserModel.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] });
+            const response = yield db_1.UserModel.findOne({ $or: [{ 'accountData.login': auth.loginOrEmail }, { 'accountData.email': auth.loginOrEmail }] }).lean();
             return response ? response : false;
         });
     },
     getConfirmCode(code) {
         return __awaiter(this, void 0, void 0, function* () {
-            const getUser = yield db_1.UserModel.findOne({ 'emailConfirmation.confirmationCode': code });
+            const getUser = yield db_1.UserModel.findOne({ 'emailConfirmation.confirmationCode': code }).lean();
             if (getUser) {
                 const respUpdate = yield db_1.UserModel.updateOne({ _id: getUser._id }, { isConfirmed: true });
                 return respUpdate.modifiedCount === 1;
@@ -55,7 +55,7 @@ exports.authRepositories = {
     },
     recoveryCodeEmailSend(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const getUser = yield db_1.UserModel.findOne({ 'accountData.email': email });
+            const getUser = yield db_1.UserModel.findOne({ 'accountData.email': email }).lean();
             let id = getUser ? getUser._id : null;
             if (id) {
                 const recoveryCode = (0, uuid_1.v4)();
@@ -76,7 +76,7 @@ exports.authRepositories = {
     },
     registrationEmailResending(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const getUser = yield db_1.UserModel.findOne({ 'accountData.email': email });
+            const getUser = yield db_1.UserModel.findOne({ 'accountData.email': email }).lean();
             if (getUser) {
                 const newCode = (0, uuid_1.v4)();
                 const respUpdate = yield db_1.UserModel.updateOne({ _id: getUser._id }, { 'emailConfirmation.confirmationCode': newCode });

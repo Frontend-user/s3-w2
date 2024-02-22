@@ -82,7 +82,7 @@ exports.authService = {
             const passwordHash = yield jwt_service_1.jwtService.generateHash(newPassword.newPassword, passwordSalt);
             let getUserEmail;
             try {
-                getUserEmail = yield db_1.RecoveryCodeModel.findOne({ recoveryCode: newPassword.recoveryCode });
+                getUserEmail = yield db_1.RecoveryCodeModel.findOne({ recoveryCode: newPassword.recoveryCode }).lean();
             }
             catch (e) {
                 return false;

@@ -82,7 +82,7 @@ describe('/blogs', () => {
 
     it('[SearchNameTerm] [GET BLOGS][QUERY SearchNameTerm] [EXISTING]should arrays length = 1', async () => {
         const response = await request(app)
-            .get(`/blogs?SearchNameTerm=a`)
+            .get(`/blogs?searchNameTerm=a`)
         const responseBlogs = response.body.items
 
         expect(responseBlogs.length).toEqual(1)
@@ -90,7 +90,7 @@ describe('/blogs', () => {
 
     it('[CHECK ALL QUERY][GET BLOGS][QUERY] [EXISTING]should return 200 for  existing blog', async () => {
         const response = await request(app)
-            .get(`/blogs?SearchNameTerm=d`)
+            .get(`/blogs?searchNameTerm=d`)
             .query({sortBy: 'name', sortDirection: 'desc'})
         const responseBlogs = response.body.items
 
