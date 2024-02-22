@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newPasswordValidation = exports.recoveryValidationMiddleware = exports.newPasswordRecoveryRestrictionValidator = exports.passwordRecoveryRestrictionValidator = exports.emailConfirmRestrictionValidator = exports.emailResendingRestrictionValidator = exports.loginRestrictionValidator = exports.authRestrictionValidator = exports.tokenValidationMiddleware = exports.refreshTokenValidator = exports.isUnValidTokenMiddleware = exports.authorizationTokenMiddleware = void 0;
+exports.newPasswordValidation = exports.recoveryValidationMiddleware = exports.newPasswordRecoveryRestrictionValidator = exports.customRestrictionValidator = exports.passwordRecoveryRestrictionValidator = exports.emailConfirmRestrictionValidator = exports.emailResendingRestrictionValidator = exports.loginRestrictionValidator = exports.authRestrictionValidator = exports.tokenValidationMiddleware = exports.refreshTokenValidator = exports.isUnValidTokenMiddleware = exports.authorizationTokenMiddleware = void 0;
 const express_validator_1 = require("express-validator");
 const jwt_service_1 = require("../../application/jwt-service");
 const auth_repository_1 = require("../auth-repository/auth-repository");
@@ -159,6 +159,24 @@ const passwordRecoveryRestrictionValidator = (req, res, next) => {
 };
 exports.passwordRecoveryRestrictionValidator = passwordRecoveryRestrictionValidator;
 let newPasswordRecoveryDates = [];
+let requestArray = {
+    url: []
+};
+const customRestrictionValidator = (req, res, next) => {
+    let now = Date.now();
+    if (!requestArray[req.originalUrl]) {
+        requestArray[req.originalUrl] = [];
+    }
+    if (requestArray[req.originalUrl].length >= 4 && (now - requestArray[req.originalUrl].slice(-5)[0]) < 3000) {
+        res.sendStatus(429);
+        return;
+    }
+    else {
+        requestArray[req.originalUrl].push(now);
+        next();
+    }
+};
+exports.customRestrictionValidator = customRestrictionValidator;
 const newPasswordRecoveryRestrictionValidator = (req, res, next) => {
     let now = Date.now();
     if (newPasswordRecoveryDates.length >= 5 && (now - newPasswordRecoveryDates[0]) < 10000) {

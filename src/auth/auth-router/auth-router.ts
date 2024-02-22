@@ -33,7 +33,7 @@ import {ObjectId} from "mongodb";
 import {authRepositories} from "../auth-repository/auth-repository";
 import {
     authorizationTokenMiddleware,
-    authRestrictionValidator,
+    authRestrictionValidator, customRestrictionValidator,
     emailConfirmRestrictionValidator,
     emailResendingRestrictionValidator,
     isUnValidTokenMiddleware,
@@ -248,7 +248,7 @@ authRouter.post('/registration-email-resending',
     })
 
 authRouter.post('/password-recovery',
-    passwordRecoveryRestrictionValidator,
+    customRestrictionValidator,
     usersEmailValidation,
     userEmailExistValidation,
     recoveryValidationMiddleware,
