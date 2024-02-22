@@ -7,8 +7,8 @@ export const blogsRepositories = {
 
     async createBlog(blog: BlogCreateType): Promise<false | ObjectId> {
         try {
-            const response = await blogsCollection.insertOne(blog)
-            return response ? response.insertedId : false
+            const response = await BlogModel.create(blog)
+            return response ? response._id : false
 
         }
     catch (e){

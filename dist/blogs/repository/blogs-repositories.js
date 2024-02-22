@@ -15,8 +15,8 @@ exports.blogsRepositories = {
     createBlog(blog) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const response = yield db_1.blogsCollection.insertOne(blog);
-                return response ? response.insertedId : false;
+                const response = yield db_1.BlogModel.create(blog);
+                return response ? response._id : false;
             }
             catch (e) {
                 console.log(e, 'er');

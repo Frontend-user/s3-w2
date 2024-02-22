@@ -1,6 +1,7 @@
 export const changeIdFormat = (obj: any) => {
     obj.id = obj._id
     delete obj._id
+    delete obj.__v
     return obj
 }
 
