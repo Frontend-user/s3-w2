@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recoveryValidationMiddleware = exports.passwordRecoveryRestrictionValidator = exports.emailConfirmRestrictionValidator = exports.emailResendingRestrictionValidator = exports.loginRestrictionValidator = exports.authRestrictionValidator = exports.tokenValidationMiddleware = exports.refreshTokenValidator = exports.isUnValidTokenMiddleware = exports.authorizationTokenMiddleware = void 0;
+exports.recoveryValidationMiddleware = exports.newPasswordRecoveryRestrictionValidator = exports.passwordRecoveryRestrictionValidator = exports.emailConfirmRestrictionValidator = exports.emailResendingRestrictionValidator = exports.loginRestrictionValidator = exports.authRestrictionValidator = exports.tokenValidationMiddleware = exports.refreshTokenValidator = exports.isUnValidTokenMiddleware = exports.authorizationTokenMiddleware = void 0;
 const express_validator_1 = require("express-validator");
 const jwt_service_1 = require("../../application/jwt-service");
 const auth_repository_1 = require("../auth-repository/auth-repository");
@@ -155,6 +155,20 @@ const passwordRecoveryRestrictionValidator = (req, res, next) => {
     }
 };
 exports.passwordRecoveryRestrictionValidator = passwordRecoveryRestrictionValidator;
+let newPasswordRecoveryDates = [];
+const newPasswordRecoveryRestrictionValidator = (req, res, next) => {
+    let now = Date.now();
+    if (newPasswordRecoveryDates.length >= 5 && (now - newPasswordRecoveryDates[0]) < 10000) {
+        newPasswordRecoveryDates = [];
+        res.sendStatus(429);
+        return;
+    }
+    else {
+        newPasswordRecoveryDates.push(now);
+        next();
+    }
+};
+exports.newPasswordRecoveryRestrictionValidator = newPasswordRecoveryRestrictionValidator;
 const recoveryValidationMiddleware = (req, res, next) => {
     const errors = (0, express_validator_1.validationResult)(req).array({ onlyFirstError: true });
     console.log(errors, 'errros');

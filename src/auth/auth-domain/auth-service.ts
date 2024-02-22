@@ -6,6 +6,10 @@ import {v4 as uuidv4} from 'uuid'
 import {nodemailerService} from "../../application/nodemailer-service";
 import {add} from 'date-fns/add';
 import {usersRepositories} from "../../users/repository/users-repository";
+import {usersService} from "../../users/domain/users-service";
+import {usersQueryRepository} from "../../users/query-repository/users-query-repository";
+import {RecoveryCodeModel, UserModel} from "../../db";
+import {ObjectId} from "mongodb";
 
 const bcrypt = require('bcrypt');
 export const authService = {
@@ -50,13 +54,26 @@ export const authService = {
 
     },
 
-    async registrationConfirm(code:string){
-        return  await authRepositories.getConfirmCode(code)
+    async registrationConfirm(code: string) {
+        return await authRepositories.getConfirmCode(code)
     },
-    async registrationEmailResending(email:string) {
-       return  await authRepositories.registrationEmailResending(email)
+    async registrationEmailResending(email: string) {
+        return await authRepositories.registrationEmailResending(email)
     },
-    async recoveryCodeEmailSend(email:string) {
-        return  await authRepositories.recoveryCodeEmailSend(email)
+    async recoveryCodeEmailSend(email: string) {
+        return await authRepositories.recoveryCodeEmailSend(email)
+    },
+    async createNewPassword(newPassword: any) {
+
+        const passwordSalt = await jwtService.generateSalt(10)
+        const passwordHash = await jwtService.generateHash(newPassword.newPassword, passwordSalt)
+        let getUserEmail = await RecoveryCodeModel.findOne({recoveryCode: newPassword.recoveryCode})
+        if (getUserEmail) {
+            await UserModel.updateOne({_id: getUserEmail.userId}, {passwordSalt, passwordHash})
+            await RecoveryCodeModel.deleteOne({recoveryCode: newPassword.recoveryCode})
+            return true
+        }
+        return false
+        // return  await authRepositories.createNewPassword(newPassword)
     }
 }

@@ -46,6 +46,7 @@ export const nodemailerService = {
                 text: `Hello world?`,
                 html: `  <h1>Password recovery</h1>
        <p>To finish password recovery please follow the link below:
+       ${recoveryCode}
           <a href='https://somesite.com/password-recovery?recoveryCode=${recoveryCode}'>recovery password</a>
       </p>
     

@@ -58,10 +58,19 @@ exports.authRepositories = {
             const getUser = yield db_1.UserModel.findOne({ 'accountData.email': email });
             if (getUser) {
                 const recoveryCode = (0, uuid_1.v4)();
+                yield db_1.RecoveryCodeModel.create({
+                    email,
+                    recoveryCode,
+                    userId: getUser._id
+                });
                 yield nodemailer_service_1.nodemailerService.sendRecoveryCode(recoveryCode, email);
                 return true;
             }
             return false;
+        });
+    },
+    createNewPassword(newPassword) {
+        return __awaiter(this, void 0, void 0, function* () {
         });
     },
     registrationEmailResending(email) {

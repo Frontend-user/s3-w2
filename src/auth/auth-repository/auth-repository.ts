@@ -1,4 +1,4 @@
-import {tokensCollection, TokenModel, UserModel, usersCollection} from "../../db";
+import {tokensCollection, TokenModel, UserModel, usersCollection, RecoveryCodeModel} from "../../db";
 import {AuthType} from "../auth-types/auth-types";
 import {nodemailerService} from "../../application/nodemailer-service";
 import {v4 as uuidv4} from "uuid";
@@ -39,10 +39,20 @@ export const authRepositories = {
         const getUser = await UserModel.findOne({'accountData.email': email})
         if (getUser) {
             const recoveryCode = uuidv4()
+                    await RecoveryCodeModel.create(
+                        {
+                            email,
+                            recoveryCode,
+                            userId: getUser._id
+                        }
+                    )
                 await nodemailerService.sendRecoveryCode(recoveryCode, email)
                 return true
         }
         return false
+    },
+    async createNewPassword(newPassword:any){
+
     },
     async registrationEmailResending(email: string) {
         const getUser = await UserModel.findOne({'accountData.email': email})

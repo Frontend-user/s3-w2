@@ -16,6 +16,7 @@ const uuid_1 = require("uuid");
 const nodemailer_service_1 = require("../../application/nodemailer-service");
 const add_1 = require("date-fns/add");
 const users_repository_1 = require("../../users/repository/users-repository");
+const db_1 = require("../../db");
 const bcrypt = require('bcrypt');
 exports.authService = {
     authUser(authData) {
@@ -73,6 +74,20 @@ exports.authService = {
     recoveryCodeEmailSend(email) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield auth_repository_1.authRepositories.recoveryCodeEmailSend(email);
+        });
+    },
+    createNewPassword(newPassword) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const passwordSalt = yield jwt_service_1.jwtService.generateSalt(10);
+            const passwordHash = yield jwt_service_1.jwtService.generateHash(newPassword.newPassword, passwordSalt);
+            let getUserEmail = yield db_1.RecoveryCodeModel.findOne({ recoveryCode: newPassword.recoveryCode });
+            if (getUserEmail) {
+                yield db_1.UserModel.updateOne({ _id: getUserEmail.userId }, { passwordSalt, passwordHash });
+                yield db_1.RecoveryCodeModel.deleteOne({ recoveryCode: newPassword.recoveryCode });
+                return true;
+            }
+            return false;
+            // return  await authRepositories.createNewPassword(newPassword)
         });
     }
 };

@@ -34,7 +34,10 @@ const blogSchema = new mongoose.Schema({
     createdAt:  {type: String, required: true},
     isMembership:  {type: Boolean, required: true},
 })
-
+const recoveryCodeSchema = new mongoose.Schema({
+    recoveryCode:{type: String, required: true},
+    email:{type: String, required: true},
+})
 const userSchema = new mongoose.Schema<UserEmailEntityType>({
     accountData:{
         login: {type: String, required: true},
@@ -54,6 +57,12 @@ const userSchema = new mongoose.Schema<UserEmailEntityType>({
 export const UserModel = mongoose.model<UserEmailEntityType>('users', userSchema);
 export const TokenModel = mongoose.model('tokens',tokenSchema);
 export const BlogModel = mongoose.model('blogs',blogSchema);
+type RecoveryCodeType = {
+    email: string
+    recoveryCode: string
+    userId: ObjectId
+}
+export const RecoveryCodeModel = mongoose.model<RecoveryCodeType>('recovery-code',recoveryCodeSchema);
 export const  runDb = async () =>{
     try {
 

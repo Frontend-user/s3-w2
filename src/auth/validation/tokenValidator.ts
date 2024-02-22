@@ -3,6 +3,7 @@ import {NextFunction, Request, Response} from "express";
 import {ErrorType} from "../../common/types/error-type";
 import {jwtService} from "../../application/jwt-service";
 import {authRepositories} from "../auth-repository/auth-repository";
+import * as dgram from "dgram";
 
 export const authorizationTokenMiddleware = header('authorization').custom(async (value, {req}) => {
     if (!value) {
@@ -149,6 +150,20 @@ export const passwordRecoveryRestrictionValidator = (req: Request, res: Response
         return
     } else {
         passwordRecoveryDates.push(now)
+        next()
+    }
+}
+let newPasswordRecoveryDates: any = []
+export const newPasswordRecoveryRestrictionValidator = (req: Request, res: Response, next: NextFunction) => {
+    let now = Date.now()
+
+    if (newPasswordRecoveryDates.length >= 5 && (now - newPasswordRecoveryDates[0]) < 10000) {
+        newPasswordRecoveryDates = []
+
+        res.sendStatus(429)
+        return
+    } else {
+        newPasswordRecoveryDates.push(now)
         next()
     }
 }

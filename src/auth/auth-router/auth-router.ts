@@ -33,9 +33,14 @@ import {ObjectId} from "mongodb";
 import {authRepositories} from "../auth-repository/auth-repository";
 import {
     authorizationTokenMiddleware,
-    authRestrictionValidator, emailConfirmRestrictionValidator, emailResendingRestrictionValidator,
+    authRestrictionValidator,
+    emailConfirmRestrictionValidator,
+    emailResendingRestrictionValidator,
     isUnValidTokenMiddleware,
-    loginRestrictionValidator, passwordRecoveryRestrictionValidator, recoveryValidationMiddleware,
+    loginRestrictionValidator,
+    newPasswordRecoveryRestrictionValidator,
+    passwordRecoveryRestrictionValidator,
+    recoveryValidationMiddleware,
     refreshTokenValidator,
     tokenValidationMiddleware,
 } from "../validation/tokenValidator";
@@ -248,9 +253,27 @@ authRouter.post('/password-recovery',
     recoveryValidationMiddleware,
     async (req: Request, res: Response) => {
         try {
-         await authService.recoveryCodeEmailSend(req.body.email)
+            await authService.recoveryCodeEmailSend(req.body.email)
             res.send(204)
 
+        } catch (error) {
+            res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
+        }
+    })
+
+authRouter.post('/new-password',
+    newPasswordRecoveryRestrictionValidator,
+    async (req: Request, res: Response) => {
+        try {
+            let newPassword = {
+                newPassword: req.body.newPassword,
+                recoveryCode: req.body.recoveryCode
+            }
+            let response = await authService.createNewPassword(newPassword)
+            if (!response) {
+                res.sendStatus(HTTP_STATUSES.SOMETHING_WRONG_400)
+            }
+            res.sendStatus(204)
         } catch (error) {
             res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
         }

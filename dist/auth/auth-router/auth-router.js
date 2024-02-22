@@ -191,4 +191,20 @@ exports.authRouter.post('/password-recovery', tokenValidator_1.passwordRecoveryR
         res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
     }
 }));
+exports.authRouter.post('/new-password', tokenValidator_1.newPasswordRecoveryRestrictionValidator, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let newPassword = {
+            newPassword: req.body.newPassword,
+            recoveryCode: req.body.recoveryCode
+        };
+        let response = yield auth_service_1.authService.createNewPassword(newPassword);
+        if (!response) {
+            res.sendStatus(http_statuses_1.HTTP_STATUSES.SOMETHING_WRONG_400);
+        }
+        res.sendStatus(204);
+    }
+    catch (error) {
+        res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
+    }
+}));
 //# sourceMappingURL=auth-router.js.map

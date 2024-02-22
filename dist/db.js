@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.runDb = exports.BlogModel = exports.TokenModel = exports.UserModel = exports.devicesCollection = exports.tokensCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
+exports.runDb = exports.RecoveryCodeModel = exports.BlogModel = exports.TokenModel = exports.UserModel = exports.devicesCollection = exports.tokensCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
 const mongodb_1 = require("mongodb");
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
@@ -39,6 +39,10 @@ const blogSchema = new mongoose_1.default.Schema({
     createdAt: { type: String, required: true },
     isMembership: { type: Boolean, required: true },
 });
+const recoveryCodeSchema = new mongoose_1.default.Schema({
+    recoveryCode: { type: String, required: true },
+    email: { type: String, required: true },
+});
 const userSchema = new mongoose_1.default.Schema({
     accountData: {
         login: { type: String, required: true },
@@ -58,6 +62,7 @@ const userSchema = new mongoose_1.default.Schema({
 exports.UserModel = mongoose_1.default.model('users', userSchema);
 exports.TokenModel = mongoose_1.default.model('tokens', tokenSchema);
 exports.BlogModel = mongoose_1.default.model('blogs', blogSchema);
+exports.RecoveryCodeModel = mongoose_1.default.model('recovery-code', recoveryCodeSchema);
 const runDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield exports.client.connect();
