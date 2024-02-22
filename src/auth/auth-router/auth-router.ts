@@ -275,6 +275,7 @@ authRouter.post('/new-password',
             let response = await authService.createNewPassword(newPassword)
             if (!response) {
                 res.status(HTTP_STATUSES.SOMETHING_WRONG_400).send({ errorsMessages: [{ message: 'String', field: "recoveryCode" }] })
+                  return
             }
             res.sendStatus(204)
         } catch (error) {
