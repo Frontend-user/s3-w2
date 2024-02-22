@@ -7,9 +7,9 @@ import {PostModel} from "../../db";
 
 export const postsRepositories = {
 
-    async createPost(post:PostCreateType): Promise<false | ObjectId> {
+    async createPost(post:PostCreateType): Promise<false | string> {
         const response = await PostModel.create(post)
-        return response._id ? response._id: false
+        return response? String(response._id): false
     },
 
     async updatePost(id:ObjectId, updatePost:PostUpdateType): Promise<boolean> {

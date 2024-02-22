@@ -15,7 +15,7 @@ exports.postsRepositories = {
     createPost(post) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield db_1.PostModel.create(post);
-            return response._id ? response._id : false;
+            return response ? String(response._id) : false;
         });
     },
     updatePost(id, updatePost) {

@@ -57,7 +57,7 @@ exports.blogsRouter.post('/', ...blogValidators, (req, res) => __awaiter(void 0,
         };
         const response = yield blogs_service_1.blogsService.createBlog(newBlog);
         if (response) {
-            const createdBlog = yield blogs_query_repository_1.blogsQueryRepository.getBlogById(response);
+            const createdBlog = yield blogs_query_repository_1.blogsQueryRepository.getBlogById(String(response));
             res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(createdBlog);
             return;
         }

@@ -62,7 +62,7 @@ blogsRouter.post('/',
             }
             const response: ObjectId | false = await blogsService.createBlog(newBlog)
             if (response) {
-                const createdBlog: BlogViewType | boolean = await blogsQueryRepository.getBlogById(response)
+                const createdBlog: BlogViewType | boolean = await blogsQueryRepository.getBlogById(String(response))
                 res.status(HTTP_STATUSES.CREATED_201).send(createdBlog)
                 return
             }

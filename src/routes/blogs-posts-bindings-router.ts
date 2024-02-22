@@ -38,7 +38,7 @@ blogsPostsBindRouter.get('/:blogId/posts',
         let {sortBy, sortDirection, pageNumber, pageSize} = getQueryData(req)
 
         try {
-            const posts = await postsQueryRepository.getPostsByBlogId(String(req.params.blogId), sortBy, sortDirection, pageNumber,pageSize)
+            const posts = await postsQueryRepository.getPostsByBlogId(String(req.params.blogId), sortBy, sortDirection, pageNumber, pageSize)
             res.send(posts)
         } catch (error) {
             console.error('Ошибка при получении данных из коллекции:', error);
@@ -51,29 +51,30 @@ blogsPostsBindRouter.post('/:blogId/posts',
     ...blogsPostBindValidators,
     async (req: Request, res: Response) => {
         let getBlogName
-        const getBlog:BlogViewType|boolean =  await blogsQueryRepository.getBlogById( req.params.blogId)
-        if(getBlog){
+        const getBlog: BlogViewType | boolean = await blogsQueryRepository.getBlogById(req.params.blogId)
+        if (getBlog) {
             getBlogName = getBlog.name
-        let newPost: PostCreateType = {
-            title: req.body.title,
-            shortDescription: req.body.shortDescription,
-            content: req.body.content,
-            blogId: req.params.blogId,
-            blogName: getBlogName,
-            createdAt: new Date().toISOString()
-        }
-
-        try {
-            const response = await postsService.createPost(newPost)
-            if (response instanceof ObjectId) {
-                const createdPost: PostViewType | boolean = await postsQueryRepository.getPostById(response)
-                res.status(HTTP_STATUSES.CREATED_201).send(createdPost)
-                return
+            let newPost: PostCreateType = {
+                title: req.body.title,
+                shortDescription: req.body.shortDescription,
+                content: req.body.content,
+                blogId: req.params.blogId,
+                blogName: getBlogName,
+                createdAt: new Date().toISOString()
             }
-            res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
 
-        } catch (error) {
-            res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
-        }
+            try {
+                const response = await postsService.createPost(newPost)
+                const createdPost: PostViewType | boolean = await postsQueryRepository.getPostById(String(response))
+                if (!createdPost) {
+                    res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
+                    return
+                }
+                res.status(HTTP_STATUSES.CREATED_201).send(createdPost)
+
+
+            } catch (error) {
+                res.sendStatus(HTTP_STATUSES.SERVER_ERROR_500)
+            }
         }
     })

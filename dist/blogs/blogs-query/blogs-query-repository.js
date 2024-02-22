@@ -38,11 +38,8 @@ exports.blogsQueryRepository = {
     },
     getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (mongodb_1.ObjectId.isValid(id) && typeof id === 'string' || id instanceof mongodb_1.ObjectId) {
-                const blog = yield db_1.BlogModel.findOne({ _id: new mongodb_1.ObjectId(id) });
-                return blog ? (0, change_id_format_1.changeIdFormat)(blog) : false;
-            }
-            return false;
+            const blog = yield db_1.BlogModel.findOne({ _id: new mongodb_1.ObjectId(id) });
+            return blog ? (0, change_id_format_1.changeIdFormat)(blog) : false;
         });
     },
 };

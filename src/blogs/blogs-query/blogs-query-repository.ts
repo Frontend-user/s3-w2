@@ -31,13 +31,9 @@ export const blogsQueryRepository = {
         return response
     },
 
-    async getBlogById(id: string | ObjectId): Promise<BlogViewType | false> {
-        if (ObjectId.isValid(id) && typeof id === 'string' || id instanceof ObjectId) {
+    async getBlogById(id:  string): Promise<BlogViewType | false> {
             const blog: BlogEntityType | null = await BlogModel.findOne({_id: new ObjectId(id)})
             return blog ?  changeIdFormat(blog) : false
-        }
-        return false
-
     },
 
 }

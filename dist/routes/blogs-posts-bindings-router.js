@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsPostBindValidators = exports.blogsPostsBindRouter = void 0;
 const express_1 = require("express");
-const mongodb_1 = require("mongodb");
 const http_statuses_1 = require("../common/constants/http-statuses");
 const auth_validation_1 = require("../validation/auth-validation");
 const posts_validation_1 = require("../validation/posts-validation");
@@ -56,12 +55,12 @@ exports.blogsPostsBindRouter.post('/:blogId/posts', ...exports.blogsPostBindVali
         };
         try {
             const response = yield posts_service_1.postsService.createPost(newPost);
-            if (response instanceof mongodb_1.ObjectId) {
-                const createdPost = yield posts_query_repository_1.postsQueryRepository.getPostById(response);
-                res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(createdPost);
+            const createdPost = yield posts_query_repository_1.postsQueryRepository.getPostById(String(response));
+            if (!createdPost) {
+                res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
                 return;
             }
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
+            res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(createdPost);
         }
         catch (error) {
             res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);

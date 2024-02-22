@@ -6,7 +6,7 @@ import {postsRepositories} from "../repositories/posts-repositories";
 
 export const postsService = {
 
-    async createPost(post: PostCreateType): Promise<false | ObjectId> {
+    async createPost(post: PostCreateType): Promise<false | String> {
         const newPostId = await postsRepositories.createPost(post)
         return newPostId ? newPostId : false
     },
