@@ -141,7 +141,7 @@ authRouter.post('/refresh-token',
     }
 )
 authRouter.post('/login',
-    loginRestrictionValidator,
+    customRestrictionValidator,
     async (req: Request, res: Response) => {
         try {
             const authData: AuthType = {
@@ -181,7 +181,7 @@ authRouter.post('/login',
     })
 
 authRouter.post('/registration',
-    authRestrictionValidator,
+    customRestrictionValidator,
     ...registrationValidators,
     async (req: Request, res: Response) => {
         try {
@@ -206,7 +206,7 @@ authRouter.post('/registration',
 
 
 authRouter.post('/registration-confirmation',
-    emailConfirmRestrictionValidator,
+    customRestrictionValidator,
     checkCodeConfirmation,
     checkCodeExist,
     inputValidationMiddleware,
@@ -227,7 +227,7 @@ authRouter.post('/registration-confirmation',
     })
 
 authRouter.post('/registration-email-resending',
-    emailResendingRestrictionValidator,
+    customRestrictionValidator,
     checkEmailConfirmation,
     userEmailRecendingExistValidation,
     inputValidationMiddleware,
@@ -263,7 +263,7 @@ authRouter.post('/password-recovery',
     })
 
 authRouter.post('/new-password',
-    newPasswordRecoveryRestrictionValidator,
+    customRestrictionValidator,
     newPasswordValidation,
     recoveryValidationMiddleware,
     async (req: Request, res: Response) => {

@@ -104,7 +104,7 @@ exports.authRouter.post('/refresh-token', tokenValidator_1.refreshTokenValidator
     res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
     res.send({ accessToken: token });
 }));
-exports.authRouter.post('/login', tokenValidator_1.loginRestrictionValidator, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter.post('/login', tokenValidator_1.customRestrictionValidator, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
         const authData = {
@@ -138,7 +138,7 @@ exports.authRouter.post('/login', tokenValidator_1.loginRestrictionValidator, (r
         res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
     }
 }));
-exports.authRouter.post('/registration', tokenValidator_1.authRestrictionValidator, ...exports.registrationValidators, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter.post('/registration', tokenValidator_1.customRestrictionValidator, ...exports.registrationValidators, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userInputData = {
             login: req.body.login,
@@ -156,7 +156,7 @@ exports.authRouter.post('/registration', tokenValidator_1.authRestrictionValidat
         res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
     }
 }));
-exports.authRouter.post('/registration-confirmation', tokenValidator_1.emailConfirmRestrictionValidator, users_validation_1.checkCodeConfirmation, users_validation_1.checkCodeExist, blogs_validation_1.inputValidationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter.post('/registration-confirmation', tokenValidator_1.customRestrictionValidator, users_validation_1.checkCodeConfirmation, users_validation_1.checkCodeExist, blogs_validation_1.inputValidationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield auth_service_1.authService.registrationConfirm(req.body.code);
         if (!response) {
@@ -169,7 +169,7 @@ exports.authRouter.post('/registration-confirmation', tokenValidator_1.emailConf
         res.sendStatus(http_statuses_1.HTTP_STATUSES.SERVER_ERROR_500);
     }
 }));
-exports.authRouter.post('/registration-email-resending', tokenValidator_1.emailResendingRestrictionValidator, users_validation_1.checkEmailConfirmation, users_validation_1.userEmailRecendingExistValidation, blogs_validation_1.inputValidationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter.post('/registration-email-resending', tokenValidator_1.customRestrictionValidator, users_validation_1.checkEmailConfirmation, users_validation_1.userEmailRecendingExistValidation, blogs_validation_1.inputValidationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield auth_service_1.authService.registrationEmailResending(req.body.email);
         if (!response) {
@@ -191,7 +191,7 @@ exports.authRouter.post('/password-recovery', tokenValidator_1.customRestriction
         res.sendStatus(http_statuses_1.HTTP_STATUSES.SOMETHING_WRONG_400);
     }
 }));
-exports.authRouter.post('/new-password', tokenValidator_1.newPasswordRecoveryRestrictionValidator, tokenValidator_1.newPasswordValidation, tokenValidator_1.recoveryValidationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.authRouter.post('/new-password', tokenValidator_1.customRestrictionValidator, tokenValidator_1.newPasswordValidation, tokenValidator_1.recoveryValidationMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         let newPassword = {
             newPassword: req.body.newPassword,

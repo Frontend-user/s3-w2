@@ -159,20 +159,18 @@ const passwordRecoveryRestrictionValidator = (req, res, next) => {
 };
 exports.passwordRecoveryRestrictionValidator = passwordRecoveryRestrictionValidator;
 let newPasswordRecoveryDates = [];
-let requestArray = {
-    url: []
-};
+let requestArray = {};
 const customRestrictionValidator = (req, res, next) => {
     let now = Date.now();
-    if (!requestArray[req.originalUrl]) {
-        requestArray[req.originalUrl] = [];
+    if (!requestArray[req.originalUrl + req.ip]) {
+        requestArray[req.originalUrl + req.ip] = [];
     }
-    if (requestArray[req.originalUrl].length >= 4 && (now - requestArray[req.originalUrl].slice(-5)[0]) < 3000) {
+    if (requestArray[req.originalUrl + req.ip].length >= 4 && (now - requestArray[req.originalUrl + req.ip].slice(-5)[0]) < 10000) {
         res.sendStatus(429);
         return;
     }
     else {
-        requestArray[req.originalUrl].push(now);
+        requestArray[req.originalUrl + req.ip].push(now);
         next();
     }
 };
