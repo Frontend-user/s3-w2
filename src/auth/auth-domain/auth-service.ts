@@ -67,14 +67,19 @@ export const authService = {
         console.log('1')
         const passwordSalt = await jwtService.generateSalt(10)
         const passwordHash = await jwtService.generateHash(newPassword.newPassword, passwordSalt)
+        let getUserEmail
+        try {
+            getUserEmail = await RecoveryCodeModel.findOne({recoveryCode: newPassword.recoveryCode})
 
-        let getUserEmail = await RecoveryCodeModel.findOne({recoveryCode: newPassword.recoveryCode})
+        } catch (e) {
+            return false
+        }
         // let getUserEmail = await RecoveryCodeModel.find({}).lean()
 
         if (getUserEmail) {
 
             let userBeforeChange = await UserModel.findOne({_id: getUserEmail.userId})
-            console.log(userBeforeChange,'userBeforeChange')
+            console.log(userBeforeChange, 'userBeforeChange')
             await UserModel.updateOne({_id: getUserEmail.userId}, {passwordSalt, passwordHash})
             let userAfterChange = await UserModel.findOne({_id: getUserEmail.userId})
             console.log(userAfterChange, 'userAfterChange')

@@ -199,7 +199,7 @@ exports.authRouter.post('/new-password', tokenValidator_1.customRestrictionValid
         };
         let response = yield auth_service_1.authService.createNewPassword(newPassword);
         if (!response) {
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.SOMETHING_WRONG_400);
+            res.status(http_statuses_1.HTTP_STATUSES.SOMETHING_WRONG_400).send({ errorsMessages: [{ message: 'String', field: "recoveryCode" }] });
         }
         res.sendStatus(204);
     }

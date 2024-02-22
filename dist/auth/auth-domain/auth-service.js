@@ -81,7 +81,13 @@ exports.authService = {
             console.log('1');
             const passwordSalt = yield jwt_service_1.jwtService.generateSalt(10);
             const passwordHash = yield jwt_service_1.jwtService.generateHash(newPassword.newPassword, passwordSalt);
-            let getUserEmail = yield db_1.RecoveryCodeModel.findOne({ recoveryCode: newPassword.recoveryCode });
+            let getUserEmail;
+            try {
+                getUserEmail = yield db_1.RecoveryCodeModel.findOne({ recoveryCode: newPassword.recoveryCode });
+            }
+            catch (e) {
+                return false;
+            }
             // let getUserEmail = await RecoveryCodeModel.find({}).lean()
             if (getUserEmail) {
                 let userBeforeChange = yield db_1.UserModel.findOne({ _id: getUserEmail.userId });
