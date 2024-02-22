@@ -249,13 +249,13 @@ authRouter.post('/registration-email-resending',
 
 authRouter.post('/password-recovery',
     passwordRecoveryRestrictionValidator,
-    // usersEmailValidation,
-    // userEmailExistValidation,
-    // recoveryValidationMiddleware,
+    usersEmailValidation,
+    userEmailExistValidation,
+    recoveryValidationMiddleware,
     async (req: Request, res: Response) => {
         try {
-    // let resp =  await authService.recoveryCodeEmailSend(req.body.email)
-            res.send(204)
+            let resp = await authService.recoveryCodeEmailSend(req.body.email)
+            res.sendStatus(204)
 
         } catch (error) {
             res.sendStatus(HTTP_STATUSES.SOMETHING_WRONG_400)
