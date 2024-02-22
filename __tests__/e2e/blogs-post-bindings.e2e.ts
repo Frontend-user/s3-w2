@@ -5,9 +5,20 @@ import {BlogUpdateType} from "../../src/common/types/blog-type";
 import {blogsTestManager} from "../utils/blogsTestManager";
 import {Routes} from "../../src/common/constants/routes";
 import {PostUpdateType, PostUpdateTypeForBind} from "../../src/common/types/post-type";
+import mongoose from "mongoose";
 
 describe('/blogs', () => {
+    const mongoURI:string = process.env.MONGO_URL!
 
+    beforeAll(async () => {
+        /* Connecting to the database. */
+        await mongoose.connect(mongoURI)
+    })
+
+    afterAll(async () => {
+        /* Closing database connection after each test. */
+        await mongoose.connection.close()
+    })
     const token = 'Basic YWRtaW46cXdlcnR5'
 
     beforeAll(async () => {

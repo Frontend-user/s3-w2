@@ -25,7 +25,7 @@ export const postBlogIdValidation = body('blogId').trim().isLength({min: 1, max:
 })
 
 export const postBlogIdExistValidation = body('blogId').custom(async (value, {req}) => {
-    const isExistBlogId: BlogViewType | boolean = await blogsQueryRepository.getBlogById(new ObjectId(value))
+    const isExistBlogId: BlogViewType | boolean = await blogsQueryRepository.getBlogById(value)
     if (isExistBlogId) {
         return true
     } else {

@@ -33,7 +33,7 @@ export const blogsQueryRepository = {
 
     async getBlogById(id:  string): Promise<BlogViewType | false> {
             const blog: BlogEntityType | null = await BlogModel.findOne({_id: new ObjectId(id)})
-            return blog ?  changeIdFormat(blog) : false
+            return blog ? await changeIdFormat(blog) : false
     },
 
 }

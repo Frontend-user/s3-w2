@@ -5,8 +5,20 @@ import {Routes} from "../../src/common/constants/routes";
 import any = jasmine.any;
 // @ts-ignore
 import {blogsTestManager} from "../utils/blogsTestManager";
+import mongoose from "mongoose";
 
 describe('/blogs', () => {
+    const mongoURI:string = process.env.MONGO_URL!
+
+    beforeAll(async () => {
+        /* Connecting to the database. */
+        await mongoose.connect(mongoURI)
+    })
+
+    afterAll(async () => {
+        /* Closing database connection after each test. */
+        await mongoose.connection.close()
+    })
     const token = 'Basic YWRtaW46cXdlcnR5'
 
     beforeAll(async () => {
