@@ -188,8 +188,8 @@ exports.authRouter.post('/password-recovery', tokenValidator_1.passwordRecoveryR
 // recoveryValidationMiddleware,
 (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // let resp =  await authService.recoveryCodeEmailSend(req.body.email)
-        res.send(204);
+        // let resp = await authService.recoveryCodeEmailSend(req.body.email)
+        res.sendStatus(204);
     }
     catch (error) {
         res.sendStatus(http_statuses_1.HTTP_STATUSES.SOMETHING_WRONG_400);
