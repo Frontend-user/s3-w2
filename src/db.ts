@@ -37,6 +37,7 @@ const blogSchema = new mongoose.Schema({
 const recoveryCodeSchema = new mongoose.Schema({
     recoveryCode:{type: String, required: true},
     email:{type: String, required: true},
+    userId:{type: ObjectId, required: true},
 })
 const userSchema = new mongoose.Schema<UserEmailEntityType>({
     accountData:{

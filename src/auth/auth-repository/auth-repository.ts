@@ -2,6 +2,9 @@ import {tokensCollection, TokenModel, UserModel, usersCollection, RecoveryCodeMo
 import {AuthType} from "../auth-types/auth-types";
 import {nodemailerService} from "../../application/nodemailer-service";
 import {v4 as uuidv4} from "uuid";
+import {UserEmailEntityType} from "../../users/types/user-types";
+import * as repl from "repl";
+import {ObjectId} from "mongodb";
 
 export const authRepositories = {
 
@@ -35,23 +38,29 @@ export const authRepositories = {
         const tokens = await TokenModel.find({}).lean()
         return tokens
     },
-    async recoveryCodeEmailSend(email: string){
+    async recoveryCodeEmailSend(email: string) {
         const getUser = await UserModel.findOne({'accountData.email': email})
-        if (getUser) {
+        console.log(getUser, 'getUser')
+        let id: ObjectId | null = getUser ? getUser._id : null
+        if (id) {
             const recoveryCode = uuidv4()
-                    await RecoveryCodeModel.create(
-                        {
-                            email,
-                            recoveryCode,
-                            userId: getUser._id
-                        }
-                    )
-                await nodemailerService.sendRecoveryCode(recoveryCode, email)
-                return true
+            await RecoveryCodeModel.create(
+                {
+                    email,
+                    recoveryCode,
+                    userId: id
+                }
+            )
+            let RecoveryCodeModels = await RecoveryCodeModel.find({}).lean()
+            console.log(RecoveryCodeModels, 'RecoveryCodeModels')
+            const getUser = await UserModel.findOne({'accountData.email': email})
+
+            await nodemailerService.sendRecoveryCode(recoveryCode, email)
+            return true
         }
         return false
     },
-    async createNewPassword(newPassword:any){
+    async createNewPassword(newPassword: any) {
 
     },
     async registrationEmailResending(email: string) {

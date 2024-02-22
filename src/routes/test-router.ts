@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {app} from "../app";
-import {client} from "../db";
+import {client, RecoveryCodeModel} from "../db";
 
 export const testRouter = Router({})
 
@@ -14,7 +14,7 @@ testRouter.delete('/all-data', async (req: Request, res: Response) => {
         await client.db('db').collection('comments').deleteMany({});
         await client.db('db').collection('tokens').deleteMany({});
         await client.db('db').collection('devices').deleteMany({});
-        await client.db('db').collection('recovery-code').deleteMany({});
+        await RecoveryCodeModel.deleteMany({});
 
         res.sendStatus(204)
 

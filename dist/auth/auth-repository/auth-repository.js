@@ -56,13 +56,18 @@ exports.authRepositories = {
     recoveryCodeEmailSend(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const getUser = yield db_1.UserModel.findOne({ 'accountData.email': email });
-            if (getUser) {
+            console.log(getUser, 'getUser');
+            let id = getUser ? getUser._id : null;
+            if (id) {
                 const recoveryCode = (0, uuid_1.v4)();
                 yield db_1.RecoveryCodeModel.create({
                     email,
                     recoveryCode,
-                    userId: getUser._id
+                    userId: id
                 });
+                let RecoveryCodeModels = yield db_1.RecoveryCodeModel.find({}).lean();
+                console.log(RecoveryCodeModels, 'RecoveryCodeModels');
+                const getUser = yield db_1.UserModel.findOne({ 'accountData.email': email });
                 yield nodemailer_service_1.nodemailerService.sendRecoveryCode(recoveryCode, email);
                 return true;
             }

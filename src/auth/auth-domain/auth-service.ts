@@ -64,13 +64,21 @@ export const authService = {
         return await authRepositories.recoveryCodeEmailSend(email)
     },
     async createNewPassword(newPassword: any) {
-
+        console.log('1')
         const passwordSalt = await jwtService.generateSalt(10)
         const passwordHash = await jwtService.generateHash(newPassword.newPassword, passwordSalt)
+
         let getUserEmail = await RecoveryCodeModel.findOne({recoveryCode: newPassword.recoveryCode})
+        // let getUserEmail = await RecoveryCodeModel.find({}).lean()
+
         if (getUserEmail) {
+
+            let userBeforeChange = await UserModel.findOne({_id: getUserEmail.userId})
+            console.log(userBeforeChange,'userBeforeChange')
             await UserModel.updateOne({_id: getUserEmail.userId}, {passwordSalt, passwordHash})
-            await RecoveryCodeModel.deleteOne({recoveryCode: newPassword.recoveryCode})
+            let userAfterChange = await UserModel.findOne({_id: getUserEmail.userId})
+            console.log(userAfterChange, 'userAfterChange')
+            // await RecoveryCodeModel.deleteOne({recoveryCode: newPassword.recoveryCode})
             return true
         }
         return false

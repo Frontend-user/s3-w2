@@ -42,6 +42,7 @@ const blogSchema = new mongoose_1.default.Schema({
 const recoveryCodeSchema = new mongoose_1.default.Schema({
     recoveryCode: { type: String, required: true },
     email: { type: String, required: true },
+    userId: { type: mongodb_1.ObjectId, required: true },
 });
 const userSchema = new mongoose_1.default.Schema({
     accountData: {
