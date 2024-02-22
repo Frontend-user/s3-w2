@@ -26,7 +26,7 @@ exports.blogsRepositories = {
     },
     updateBlog(id, updateBlog) {
         return __awaiter(this, void 0, void 0, function* () {
-            const response = yield db_1.blogsCollection.updateOne({ _id: id }, { $set: updateBlog });
+            const response = yield db_1.BlogModel.updateOne({ _id: id }, updateBlog);
             return response.matchedCount === 1;
         });
     },
