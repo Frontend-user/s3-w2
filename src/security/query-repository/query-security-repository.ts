@@ -1,5 +1,5 @@
-import {devicesCollection, usersCollection} from "../../db";
-import {changeIdFormat,  deleteMongoUserId} from "../../common/custom-methods/change-id-format";
+import {devicesCollection} from "../../db";
+import {deleteMongoUserId} from "../../common/custom-methods/change-id-format";
 import {jwtService} from "../../application/jwt-service";
 
 export const querySecurityRepositories = {

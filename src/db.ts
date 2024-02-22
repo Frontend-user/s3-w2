@@ -34,10 +34,10 @@ const blogSchema = new mongoose.Schema({
     createdAt:  {type: String, required: true},
     isMembership:  {type: Boolean, required: true},
 })
-const recoveryCodeSchema = new mongoose.Schema({
+const recoveryCodeSchema = new mongoose.Schema<RecoveryCodeType>({
     recoveryCode:{type: String, required: true},
     email:{type: String, required: true},
-    userId:{type: ObjectId, required: true},
+    userId:{type: ObjectId, required: true}
 })
 const userSchema = new mongoose.Schema<UserEmailEntityType>({
     accountData:{
@@ -54,7 +54,6 @@ const userSchema = new mongoose.Schema<UserEmailEntityType>({
     isConfirmed:  {type: Boolean, required: true},
     isCreatedFromAdmin:  {type: Boolean, required: true}
 });
-// const response = await UserModel.find({}).lean()
 export const UserModel = mongoose.model<UserEmailEntityType>('users', userSchema);
 export const TokenModel = mongoose.model('tokens',tokenSchema);
 export const BlogModel = mongoose.model('blogs',blogSchema);

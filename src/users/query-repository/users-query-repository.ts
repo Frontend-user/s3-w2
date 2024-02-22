@@ -1,5 +1,5 @@
 import {blogsPaginate} from "../../blogs/blogs-query/utils/blogs-paginate";
-import {usersCollection} from "../../db";
+import {UserModel} from "../../db";
 import {UserEmailEntityType, UserViewType} from "../types/user-types";
 import {ObjectId, SortDirection} from "mongodb";
 import { TypeQuerySortBlog} from "../../blogs/blogs-query/types/query-types";
@@ -10,8 +10,8 @@ export const usersQueryRepository = {
         const findQuery = this.__getUsersFindings(searchLoginTerm, searchEmailTerm)
         const sortQuery = this.__getUserSorting(sortBy, sortDirection)
         const {skip, limit, newPageNumber, newPageSize} = blogsPaginate.getPagination(pageNumber, pageSize)
-        let users: UserEmailEntityType[] = await usersCollection.find(findQuery).sort(sortQuery).skip(skip).limit(limit).toArray();
-        const allUsers = await usersCollection.find(findQuery).sort(sortQuery).toArray()
+        let users: UserEmailEntityType[] = await UserModel.find(findQuery).sort(sortQuery).skip(skip).limit(limit).lean()
+        const allUsers = await UserModel.find(findQuery).sort(sortQuery).lean()
         let pagesCount = Math.ceil(allUsers.length / newPageSize)
 
         const fixArrayIds = users.map((user => this.__changeUserFormat(user)))
@@ -25,20 +25,20 @@ export const usersQueryRepository = {
     },
     async getUserById(userId: ObjectId): Promise<UserViewType | false> {
         console.log(new ObjectId(userId),'userId')
-        const getUser = await usersCollection.findOne({_id: userId})
+        const getUser = await UserModel.findOne({_id: userId})
         console.log(getUser,'GETUSER')
         return getUser ? this.__changeUserFormat(getUser) : false
     },
     async getUserByCustomField(fieldName: string, value: string): Promise<UserEmailEntityType | boolean> {
         let findQuery: any = {}
         findQuery[`${fieldName}`] = value
-        const getUser = await usersCollection.findOne(findQuery)
+        const getUser = await UserModel.findOne(findQuery)
         return !!getUser
     },
     async getUserDataByCustomField(fieldName: string, value: string): Promise<UserEmailEntityType | null> {
         let findQuery: any = {}
         findQuery[`${fieldName}`] = value
-        const getUser = await usersCollection.findOne(findQuery)
+        const getUser = await UserModel.findOne(findQuery)
         return getUser
     },
 

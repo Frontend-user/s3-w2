@@ -42,7 +42,7 @@ const blogSchema = new mongoose_1.default.Schema({
 const recoveryCodeSchema = new mongoose_1.default.Schema({
     recoveryCode: { type: String, required: true },
     email: { type: String, required: true },
-    userId: { type: mongodb_1.ObjectId, required: true },
+    userId: { type: mongodb_1.ObjectId, required: true }
 });
 const userSchema = new mongoose_1.default.Schema({
     accountData: {
@@ -59,7 +59,6 @@ const userSchema = new mongoose_1.default.Schema({
     isConfirmed: { type: Boolean, required: true },
     isCreatedFromAdmin: { type: Boolean, required: true }
 });
-// const response = await UserModel.find({}).lean()
 exports.UserModel = mongoose_1.default.model('users', userSchema);
 exports.TokenModel = mongoose_1.default.model('tokens', tokenSchema);
 exports.BlogModel = mongoose_1.default.model('blogs', blogSchema);

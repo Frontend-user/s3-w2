@@ -1,8 +1,4 @@
-import {body, check} from "express-validator";
-import {BlogViewType} from "../../common/types/blog-type";
-import {blogsQueryRepository} from "../../blogs/blogs-query/blogs-query-repository";
-import {ObjectId} from "mongodb";
-import {usersCollection} from "../../db";
+import {body} from "express-validator";
 import {usersQueryRepository} from "../query-repository/users-query-repository";
 
 const usersEmailPattern =  /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/

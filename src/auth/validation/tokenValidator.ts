@@ -162,15 +162,15 @@ let newPasswordRecoveryDates: any = []
 let requestArray:any = {}
 export const customRestrictionValidator = (req: Request, res: Response, next: NextFunction) => {
     let now = Date.now()
-
-    if(!requestArray[req.originalUrl + req.ip]) {
-        requestArray[req.originalUrl+ req.ip] = []
+    let url = req.originalUrl + req.ip
+    if(!requestArray[url]) {
+        requestArray[url] = []
     }
-    if (requestArray[req.originalUrl+ req.ip].length >=4 && (now - requestArray[req.originalUrl+ req.ip].slice(-5)[0]) < 10000) {
+    if (requestArray[url].length >=4 && (now - requestArray[url].slice(-5)[0]) < 10000) {
         res.sendStatus(429)
         return
     } else {
-        requestArray[req.originalUrl+ req.ip].push(now)
+        requestArray[url].push(now)
         next()
     }
 }

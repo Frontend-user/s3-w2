@@ -78,7 +78,6 @@ exports.authService = {
     },
     createNewPassword(newPassword) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('1');
             const passwordSalt = yield jwt_service_1.jwtService.generateSalt(10);
             const passwordHash = yield jwt_service_1.jwtService.generateHash(newPassword.newPassword, passwordSalt);
             let getUserEmail;
@@ -88,18 +87,11 @@ exports.authService = {
             catch (e) {
                 return false;
             }
-            // let getUserEmail = await RecoveryCodeModel.find({}).lean()
             if (getUserEmail) {
-                let userBeforeChange = yield db_1.UserModel.findOne({ _id: getUserEmail.userId });
-                console.log(userBeforeChange, 'userBeforeChange');
                 yield db_1.UserModel.updateOne({ _id: getUserEmail.userId }, { passwordSalt, passwordHash });
-                let userAfterChange = yield db_1.UserModel.findOne({ _id: getUserEmail.userId });
-                console.log(userAfterChange, 'userAfterChange');
-                // await RecoveryCodeModel.deleteOne({recoveryCode: newPassword.recoveryCode})
                 return true;
             }
             return false;
-            // return  await authRepositories.createNewPassword(newPassword)
         });
     }
 };

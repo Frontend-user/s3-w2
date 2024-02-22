@@ -19,8 +19,8 @@ exports.usersQueryRepository = {
             const findQuery = this.__getUsersFindings(searchLoginTerm, searchEmailTerm);
             const sortQuery = this.__getUserSorting(sortBy, sortDirection);
             const { skip, limit, newPageNumber, newPageSize } = blogs_paginate_1.blogsPaginate.getPagination(pageNumber, pageSize);
-            let users = yield db_1.usersCollection.find(findQuery).sort(sortQuery).skip(skip).limit(limit).toArray();
-            const allUsers = yield db_1.usersCollection.find(findQuery).sort(sortQuery).toArray();
+            let users = yield db_1.UserModel.find(findQuery).sort(sortQuery).skip(skip).limit(limit).lean();
+            const allUsers = yield db_1.UserModel.find(findQuery).sort(sortQuery).lean();
             let pagesCount = Math.ceil(allUsers.length / newPageSize);
             const fixArrayIds = users.map((user => this.__changeUserFormat(user)));
             return {
@@ -35,7 +35,7 @@ exports.usersQueryRepository = {
     getUserById(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(new mongodb_1.ObjectId(userId), 'userId');
-            const getUser = yield db_1.usersCollection.findOne({ _id: userId });
+            const getUser = yield db_1.UserModel.findOne({ _id: userId });
             console.log(getUser, 'GETUSER');
             return getUser ? this.__changeUserFormat(getUser) : false;
         });
@@ -44,7 +44,7 @@ exports.usersQueryRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             let findQuery = {};
             findQuery[`${fieldName}`] = value;
-            const getUser = yield db_1.usersCollection.findOne(findQuery);
+            const getUser = yield db_1.UserModel.findOne(findQuery);
             return !!getUser;
         });
     },
@@ -52,7 +52,7 @@ exports.usersQueryRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             let findQuery = {};
             findQuery[`${fieldName}`] = value;
-            const getUser = yield db_1.usersCollection.findOne(findQuery);
+            const getUser = yield db_1.UserModel.findOne(findQuery);
             return getUser;
         });
     },
